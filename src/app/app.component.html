@@ -1,0 +1,13 @@
+<!--The content below is only a placeholder and can be replaced.-->
+<div style="text-align:center">
+  <form class="container">
+    <label>Enter Sentence: </label>
+    <input class="input" (keyup)="onKey($event)"> 
+    <button (click)="onClickIPA()" type="button" class="btn btn-default">IPA</button>
+  </form>
+  <div>
+    <span ng-bind="IPASentence"></span>
+  </div>
+</div>
+
+

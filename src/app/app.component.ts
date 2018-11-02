@@ -3,6 +3,7 @@ import { Http }  from "@angular/http";
 import { HttpClient} from '@angular/common/http';
 import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
 import { WebService } from '../services/webservice';
+import { MatSnackBar } from '@angular/material';
 declare var firebase: any;
 
 @Component({
@@ -13,11 +14,13 @@ declare var firebase: any;
 export class AppComponent {
   sentence = ''
   IPAArr = []
+  IPADiSymbolArr = ['aɪ','eɪ','ɔɪ','oʊ','aʊ','ti']
   curWord = ''
   counter = 0
+  IPASentence = ''
+  splitArr = []
   utc = String(new Date().toJSON().slice(0,10).replace(/-/g,''))
-  users: User[] = [];
-  constructor(private http: HttpClient, private webService: WebService, private db : AngularFireDatabase) {
+  constructor(private http: HttpClient, private webService: WebService, private db : AngularFireDatabase, private snackBar: MatSnackBar) {
   }
   // ngOnIt(){
   //   console.log("onit")
@@ -43,11 +46,57 @@ export class AppComponent {
       this.changeFromIPAToPronunciation(this.IPAArr)
     } else {          
       this.http.get("https://api.datamuse.com/words?sp=" + this.putWordsIntoArray(this.sentence)[index] + "&md=r&max=1&ipa=1").subscribe(response => {
-      this.IPAArr.push(response[0].tags[1].substring(9, response[0].tags[1].length))
-      // console.log(this.putWordsIntoArray(this.sentence)[index])
-      // console.log(this.IPAArr[index]) 
-      this.counter++
-      this.onClickIPA(index + 1)
+        if(response[0]==null){
+          this.IPAArr.push(this.putWordsIntoArray(this.sentence)[index])
+        }
+        else{
+          let tempPronun = response[0].tags[0].substring(5, response[0].tags[0].length-1)
+          let tempIPA = response[0].tags[1].substring(9, response[0].tags[1].length).replace("ˈ","")
+          let tempSplitIPA = ''
+          let counter = 0
+
+          console.log(tempPronun)
+          console.log(tempIPA)
+          for(let i = 0; i < tempPronun.length; i++){
+            if(tempPronun.charAt(i)==' '){
+              if(tempPronun.charAt(i-1) == 1 || tempPronun.charAt(i-1) == 0){
+                  if(this.IPADiSymbolArr.indexOf(tempIPA.charAt(counter) + tempIPA.charAt(counter+1)) >= 0){
+                    tempSplitIPA = tempSplitIPA + tempIPA.charAt(counter) + tempIPA.charAt(counter+1)
+                    console.log("Is a DI" + tempIPA.charAt(counter) + tempIPA.charAt(counter+1))
+                    if(counter != 0){
+                      tempSplitIPA = tempSplitIPA + tempIPA.charAt(counter) + "-"
+                    }
+                    counter = counter + 2
+                  }
+                  else{
+                    tempSplitIPA = tempSplitIPA + tempIPA.charAt(counter)
+                    console.log("has a 1|0  in i-1" + tempIPA.charAt(counter))
+                    if(counter != 0){
+                      tempSplitIPA = tempSplitIPA + tempIPA.charAt(counter) + "-"
+                    }
+                    counter++
+                  } 
+              }
+              else{
+                tempSplitIPA = tempSplitIPA + tempIPA.charAt(counter)
+                console.log("is a normal letter" + tempIPA.charAt(counter))
+                counter++
+                
+              }
+            }
+            if(i == tempPronun.length-1){
+              console.log("in the last letter " + tempIPA.charAt(counter))
+              tempSplitIPA = tempSplitIPA + tempIPA.charAt(counter)
+            }
+            console.log(counter + " " + i)
+          }
+          console.log(tempSplitIPA)
+          this.IPAArr.push(tempSplitIPA)
+          // this.splitArr.push(response[0].tags[0].substring(5, response[0].tags[0].length-1))
+        }
+        // console.log(this.IPAArr[index])
+        this.counter++
+        this.onClickIPA(index + 1)
       })
     }
   }
@@ -96,23 +145,23 @@ export class AppComponent {
     // Arrays for vowels; symbols and sounds
     let IPAVowelSymbolArr = ['i','y','ɪ','Y','u','e','o','a','ɨ','ʉ','ɯ','ʊ', 
     'ø','ɘ','ɵ','ɤ','ə','ɛ','œ','ɝ','ɞ','ʌ','ɔ','æ','ɐ','ɑ','ä','ɒ']
-    let IPAVowelSoundArr = ['ee','ewy','ih','uw','uw','ey','o','a','TBC','uw','uw','uw',
-    'uh','a','ow','uw','uh','ey','ehw','ur','TBX','uw','aw','ah','hu','ow','he','aw']
+    let IPAVowelSoundArr = ['ee','ewy','é','uw','uw','ey','o','a','TBC','uw','uw','uw',
+    'uh','a','ow','uw','uh','eh','ehw','ur','TBX','uw','aw','ah','hu','ow','he','aw']
 
     // Arrays for Consonants; symbols and sounds
     let IPAConsonantsSymbolArr = ['ð','θ','ʃ','ʒ','ŋ','ɫ']
     let IPAConsonantsSoundArr = ['d','th','sh','j','ng','l']
-
     
-    let IPADiSymbolArr = ['aɪ','eɪ','ɔɪ','oʊ','aʊ']
-    let IPADiSoundArr = ['iy','ey','oi','ow','ow']
+
+    let IPADiSoundArr = ['(i)','(a)','oi','ó','ow','t']
     let newSent = ''
     let newPronunArr = []
+    let tempSplitArr = []
 
     for(let y = 0; y < IPAArr.length; y++){ //Indexing IPAArr value
       for(let i = 0; i < IPAArr[y].length; i++){ //Loops through each char
-        if(IPADiSymbolArr.indexOf(IPAArr[y].charAt(i) + IPAArr[y].charAt(i+1)) >= 0){ //Checks two symbols together
-          newSent = newSent + IPADiSoundArr[IPADiSymbolArr.indexOf(IPAArr[y].charAt(i) + IPAArr[y].charAt(i+1))]
+        if(this.IPADiSymbolArr.indexOf(IPAArr[y].charAt(i) + IPAArr[y].charAt(i+1)) >= 0){ //Checks two symbols together
+          newSent = newSent + IPADiSoundArr[this.IPADiSymbolArr.indexOf(IPAArr[y].charAt(i) + IPAArr[y].charAt(i+1))] 
           i++
         }
         else {
@@ -131,24 +180,35 @@ export class AppComponent {
         }
       }
       newPronunArr.push(newSent)
-      newSent = " " //adds space after every work.
+      newSent = " "
     }
-    console.log(newPronunArr);
-    this.splitIntoSounds(this.IPAArr, newPronunArr)
+    // console.log(newPronunArr);
+    this.IPASentence = newPronunArr.join(" ")
     this.IPAArr = []
+    this.splitArr = []
+    // console.log(newSent)
   }
-  
-  splitIntoSounds(newIPAArr, pronunArr){
-    // console.log(pronunArr)
-    // console.log(newIPAArr)
-    // for(let i = 0; i < newIPAArr; i++){
-      
-    // }
-  }
-    
+
+  /////////////////////////////////////////////
+  //--------------SPANISH--------------------//
+  /////////////////////////////////////////////
+  onClickSpanishIPA(index = 0) {
+    if(index == this.putWordsIntoArray(this.sentence).length) {
+      this.updateCalls()
+      this.changeFromIPAToPronunciation(this.IPAArr)
+    } else {          
+      this.http.get("https://api.datamuse.com/words?sp=" + this.putWordsIntoArray(this.sentence)[index] + "&md=r&max=1&v=es&ipa=1").subscribe(response => {
+        if(response[0]==null){
+          this.IPAArr.push(this.putWordsIntoArray(this.sentence)[index])
+          // this.snackBar.open('Form sent', 'close', {duration: 5000});
+        }
+        else{
+          this.IPAArr.push(response[0].tags[1].substring(9, response[0].tags[1].length))
+        }
+        console.log(this.IPAArr[index])
+        this.counter++
+        this.onClickIPA(index + 1)
+      })
+    }
+  }   
 }
- interface User {
-   name: string;
-   lastName: string;
-   state: string;
- }

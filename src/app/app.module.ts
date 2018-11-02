@@ -10,6 +10,9 @@ import { AngularFireModule } from 'angularfire2';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { environment  } from '../environments/environment'
 
+import { MatSnackBarModule } from '@angular/material';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -19,7 +22,9 @@ import { environment  } from '../environments/environment'
     HttpClientModule,
     FormsModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
-    AngularFireDatabaseModule
+    AngularFireDatabaseModule,
+    MatSnackBarModule,
+    BrowserAnimationsModule
   ],
   providers: [WebService],
   bootstrap: [AppComponent]

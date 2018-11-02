@@ -3,10 +3,11 @@
   <form class="container">
     <label>Enter Sentence: </label>
     <input class="input" (keyup)="onKey($event)"> 
-    <button (click)="onClickIPA()" type="button" class="btn btn-default">IPA</button>
+    <button (click)="onClickIPA()" type="button" class="btn btn-default">English</button>
+    <button (click)="onClickSpanishIPA()" type="button" class="btn btn-default">Spanish</button>
   </form>
   <div>
-    <span ng-bind="IPASentence"></span>
+    {{IPASentence}}
   </div>
 </div>
 

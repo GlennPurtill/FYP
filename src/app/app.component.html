@@ -3,11 +3,11 @@
   <form class="container">
     <label>Enter Sentence: </label>
     <input class="input" (keyup)="onKey($event)"> 
-    <button (click)="onClickIPA()" type="button" class="btn btn-default">English</button>
-    <button (click)="onClickSpanishIPA()" type="button" class="btn btn-default">Spanish</button>
+    <button (click)="onClickEnglish()" type="button" class="btn btn-default">English</button>
+    <button (click)="onClickSpanish()" type="button" class="btn btn-default">Spanish</button>
   </form>
   <div>
-    {{IPASentence}}
+    {{finishedSentence}}
   </div>
 </div>
 

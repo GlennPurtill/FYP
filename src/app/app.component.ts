@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Http }  from "@angular/http";
-import { HttpClient} from '@angular/common/http';
+import { HttpClient, HttpHeaders} from '@angular/common/http';
 import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
 import { WebService } from '../services/webservice';
 import { MatSnackBar } from '@angular/material';
@@ -13,92 +13,122 @@ declare var firebase: any;
 })
 export class AppComponent {
   sentence = ''
-  IPAArr = []
-  IPADiSymbolArr = ['aɪ','eɪ','ɔɪ','oʊ','aʊ','ti']
-  curWord = ''
   counter = 0
-  IPASentence = ''
-  splitArr = []
+  fresharr = []
+  temp = ''
+  pronunSentence = ''
+  arpabetRule = ['AE','AH','AO','AY','EY','UW','HH']
+  arpabetRuleSound = ['AH','AH','AW','IY','AY','EW','H']
+  splitArpabetCounter = 0
+  freqWordsRef = firebase.database().ref('/freqwords');
+  freqWordsSpanishRef = firebase.database().ref('/freqwordsspanish');
   utc = String(new Date().toJSON().slice(0,10).replace(/-/g,''))
+  headers = new HttpHeaders().set('Content-Type', 'application/json');
   constructor(private http: HttpClient, private webService: WebService, private db : AngularFireDatabase, private snackBar: MatSnackBar) {
   }
-  // ngOnIt(){
-  //   console.log("onit")
-  //   var x = this.db.list('users');
-  //   x.snapshotChanges().subscribe(item => {
-  //     item.forEach(element=>{
-  //       var y = element.payload.toJSON();
-  //       y["$key"] = element.key;
-  //       this.users.push(y as User);
-  //       console.log(y);
-  //     });
-  //   });
-  // }
+ 
 
-  onKey(event: any) { // without type info
+  onKey(event: any) { 
     this.sentence = event.target.value;
+    // this.sentence = 'the dog is relatively fat'
   }
 
   //gets IPA by api call
-  onClickIPA(index = 0) {
+  onClickEnglish(index = 0) {
+    this.fresharr = []
+    // // this.temp = ''
+    // console.log(this.temp + " " + index)
     if(index == this.putWordsIntoArray(this.sentence).length) {
       this.updateCalls()
-      this.changeFromIPAToPronunciation(this.IPAArr)
-    } else {          
-      this.http.get("https://api.datamuse.com/words?sp=" + this.putWordsIntoArray(this.sentence)[index] + "&md=r&max=1&ipa=1").subscribe(response => {
-        if(response[0]==null){
-          this.IPAArr.push(this.putWordsIntoArray(this.sentence)[index])
+      this.splitArpabetCounter=0
+      this.temp = ''
+    } else {
+      // console.log(index)
+      this.freqWordsRef.child(this.putWordsIntoArray(this.sentence)[index]).once('value', (snapshot) => {
+        if(snapshot.val() != null){
+          this.splitArpabet(snapshot.val(), this.putWordsIntoArray(this.sentence).length)
+          // console.log("in db " + snapshot.val())
+          this.onClickEnglish(index + 1)
         }
-        else{
-          let tempPronun = response[0].tags[0].substring(5, response[0].tags[0].length-1)
-          let tempIPA = response[0].tags[1].substring(9, response[0].tags[1].length).replace("ˈ","")
-          let tempSplitIPA = ''
-          let counter = 0
-
-          console.log(tempPronun)
-          console.log(tempIPA)
-          for(let i = 0; i < tempPronun.length; i++){
-            if(tempPronun.charAt(i)==' '){
-              if(tempPronun.charAt(i-1) == 1 || tempPronun.charAt(i-1) == 0){
-                  if(this.IPADiSymbolArr.indexOf(tempIPA.charAt(counter) + tempIPA.charAt(counter+1)) >= 0){
-                    tempSplitIPA = tempSplitIPA + tempIPA.charAt(counter) + tempIPA.charAt(counter+1)
-                    console.log("Is a DI" + tempIPA.charAt(counter) + tempIPA.charAt(counter+1))
-                    if(counter != 0){
-                      tempSplitIPA = tempSplitIPA + tempIPA.charAt(counter) + "-"
-                    }
-                    counter = counter + 2
+        else {
+          this.http.get("https://api.datamuse.com/words?sp=" + this.putWordsIntoArray(this.sentence)[index] + "&md=r&max=1&ipa=1", { headers: this.headers }).subscribe(response => {
+            this.counter++
+            if(response[0]==null){
+              this.splitArpabet(this.putWordsIntoArray(this.sentence)[index], this.putWordsIntoArray(this.sentence).length)
+              this.onClickEnglish(index + 1)
+            }
+            else{
+              let val = response[0].tags[0].substring(5, response[0].tags[0].length-1)
+              let ruledArp = ''
+              for(let i = 0; i < val.length; i++){
+                
+                  if(this.arpabetRule.indexOf(val.charAt(i) + val.charAt(i+1)) >= 0){
+                    ruledArp += this.arpabetRuleSound[this.arpabetRule.indexOf(val.charAt(i) + val.charAt(i+1))]
+                    i++
                   }
                   else{
-                    tempSplitIPA = tempSplitIPA + tempIPA.charAt(counter)
-                    console.log("has a 1|0  in i-1" + tempIPA.charAt(counter))
-                    if(counter != 0){
-                      tempSplitIPA = tempSplitIPA + tempIPA.charAt(counter) + "-"
-                    }
-                    counter++
-                  } 
-              }
-              else{
-                tempSplitIPA = tempSplitIPA + tempIPA.charAt(counter)
-                console.log("is a normal letter" + tempIPA.charAt(counter))
-                counter++
+                    ruledArp += val.charAt(i)
+                  }
                 
               }
+              this.freqWordsRef.update({ [this.putWordsIntoArray(this.sentence)[index].toLocaleLowerCase()] : ruledArp})
+              this.splitArpabet(ruledArp, this.putWordsIntoArray(this.sentence).length)
+              // console.log("api call " + response[0].tags[0].substring(5, response[0].tags[0].length-1))
+              this.onClickEnglish(index + 1)
             }
-            if(i == tempPronun.length-1){
-              console.log("in the last letter " + tempIPA.charAt(counter))
-              tempSplitIPA = tempSplitIPA + tempIPA.charAt(counter)
-            }
-            console.log(counter + " " + i)
-          }
-          console.log(tempSplitIPA)
-          this.IPAArr.push(tempSplitIPA)
-          // this.splitArr.push(response[0].tags[0].substring(5, response[0].tags[0].length-1))
+          })
         }
-        // console.log(this.IPAArr[index])
-        this.counter++
-        this.onClickIPA(index + 1)
       })
     }
+  }
+
+  splitArpabet(tempPronun, length){
+    this.splitArpabetCounter++
+    console.log(this.splitArpabetCounter)
+    tempPronun = tempPronun.replace(/ /g,'')
+    let arr = tempPronun.split('1')
+    for(let i = 0; i < arr.length; i++) {
+      if(arr[i] != ''){
+        if(i > 0 && arr[arr.length] != ' '){
+        arr[i] = '-' + arr[i]
+      }
+        for(let j = 0; j < arr[i].length; j++) {
+          if(arr[i].charAt(j) == '0') {
+            
+            if(arr[i].charAt(j+3) == '' || arr[i].charAt(j+3) == 0){
+      
+              this.temp += arr[i].substring(0, j)
+              arr[i] = arr[i].substring(j+1, arr[i].length)
+              j = 0
+        
+            }
+            else{
+
+              // this.fresharr.push(arr[i].substring(0, j) + arr[i].substring(j+1, j+2)) 
+              this.temp += arr[i].substring(0, j) + arr[i].substring(j+1, j+2)
+              arr[i] = arr[i].substring(j+2, arr[i].length)
+              j = 0
+            
+            }
+
+            if(j != arr[i].length){
+              this.temp += '-'  
+            }
+          
+          }
+          if(j == arr[i].length-1) {
+
+          // this.fresharr.push(arr[i].substring(0, j+1))
+          this.temp += arr[i].substring(0, j+1)
+
+        }
+      }
+    }
+    }
+
+    this.temp += '(' + length + ') '
+    console.log(this.temp)
+
   }
 
  //keeps track of daily api calls
@@ -115,18 +145,6 @@ export class AppComponent {
     })
   }
 
-  // checkDBForWord(word){
-  //   let freqWordsRef =  firebase.database().ref('/freqwords');
-  //   freqWordsRef.child(word).once('value', (snapshot) => {
-  //     if(snapshot.val() != null){
-  //       console.log(snapshot.val())
-  //       this.curWord = snapshot.val()
-  //       return true
-  //     }
-  //   })
-  //   return false
-  // }
-
   //checks how many words are in the inputted string
   checkWordAmount(sentence){  
     var numWords = sentence.replace(/^\s+|\s+$/g,"").split(/\s+/).length;
@@ -135,80 +153,103 @@ export class AppComponent {
 
   //puts words from input into an array
   putWordsIntoArray(sentence){
-    var arr =this.sentence.split(' ');
-    return arr;
-  }
-
-  //takes in IPAArr and changes to pronunciation
-  changeFromIPAToPronunciation(IPAArr){
-
-    // Arrays for vowels; symbols and sounds
-    let IPAVowelSymbolArr = ['i','y','ɪ','Y','u','e','o','a','ɨ','ʉ','ɯ','ʊ', 
-    'ø','ɘ','ɵ','ɤ','ə','ɛ','œ','ɝ','ɞ','ʌ','ɔ','æ','ɐ','ɑ','ä','ɒ']
-    let IPAVowelSoundArr = ['ee','ewy','é','uw','uw','ey','o','a','TBC','uw','uw','uw',
-    'uh','a','ow','uw','uh','eh','ehw','ur','TBX','uw','aw','ah','hu','ow','he','aw']
-
-    // Arrays for Consonants; symbols and sounds
-    let IPAConsonantsSymbolArr = ['ð','θ','ʃ','ʒ','ŋ','ɫ']
-    let IPAConsonantsSoundArr = ['d','th','sh','j','ng','l']
-    
-
-    let IPADiSoundArr = ['(i)','(a)','oi','ó','ow','t']
-    let newSent = ''
-    let newPronunArr = []
-    let tempSplitArr = []
-
-    for(let y = 0; y < IPAArr.length; y++){ //Indexing IPAArr value
-      for(let i = 0; i < IPAArr[y].length; i++){ //Loops through each char
-        if(this.IPADiSymbolArr.indexOf(IPAArr[y].charAt(i) + IPAArr[y].charAt(i+1)) >= 0){ //Checks two symbols together
-          newSent = newSent + IPADiSoundArr[this.IPADiSymbolArr.indexOf(IPAArr[y].charAt(i) + IPAArr[y].charAt(i+1))] 
-          i++
-        }
-        else {
-          if(IPAVowelSymbolArr.indexOf(IPAArr[y].charAt(i)) >= 0){ //Check if symbol is vowel
-            newSent = newSent + IPAVowelSoundArr[IPAVowelSymbolArr.indexOf(IPAArr[y].charAt(i))]
-          }
-          else if(IPAArr[y].charAt(i) == "ˈ"){ //Keeps '
-            newSent = newSent
-          }
-          else if(IPAConsonantsSymbolArr.indexOf(IPAArr[y].charAt(i)) >= 0){ //If constant
-            newSent = newSent + IPAConsonantsSoundArr[IPAConsonantsSymbolArr.indexOf(IPAArr[y].charAt(i))] 
-          }
-          else{ //if normal consonant just add it
-            newSent = newSent + IPAArr[y].charAt(i)
-          }
-        }
-      }
-      newPronunArr.push(newSent)
-      newSent = " "
+    var arr = this.sentence.split(' ');
+    if(arr[0] == ''){
+      arr = arr.splice(1,arr.length-1)
     }
-    // console.log(newPronunArr);
-    this.IPASentence = newPronunArr.join(" ")
-    this.IPAArr = []
-    this.splitArr = []
-    // console.log(newSent)
+    if(arr[arr.length-1] == ''){
+      arr = arr.splice(0, arr.length-1)
+    }
+    return arr;
   }
 
   /////////////////////////////////////////////
   //--------------SPANISH--------------------//
   /////////////////////////////////////////////
-  onClickSpanishIPA(index = 0) {
-    if(index == this.putWordsIntoArray(this.sentence).length) {
-      this.updateCalls()
-      this.changeFromIPAToPronunciation(this.IPAArr)
-    } else {          
-      this.http.get("https://api.datamuse.com/words?sp=" + this.putWordsIntoArray(this.sentence)[index] + "&md=r&max=1&v=es&ipa=1").subscribe(response => {
-        if(response[0]==null){
-          this.IPAArr.push(this.putWordsIntoArray(this.sentence)[index])
-          // this.snackBar.open('Form sent', 'close', {duration: 5000});
-        }
-        else{
-          this.IPAArr.push(response[0].tags[1].substring(9, response[0].tags[1].length))
-        }
-        console.log(this.IPAArr[index])
-        this.counter++
-        this.onClickIPA(index + 1)
-      })
-    }
-  }   
+  // onClickSpanish(index = 0) {
+  //   if(index == this.putWordsIntoArray(this.sentence).length) {
+  //     this.updateCalls()
+  //   } else {          
+  //     this.http.get("https://api.datamuse.com/words?sp=" + this.putWordsIntoArray(this.sentence)[index] + "&md=r&max=1&v=es&ipa=1").subscribe(response => {
+  //       if(response[0]==null){
+  //         this.IPAArr.push(this.putWordsIntoArray(this.sentence)[index])
+  //       }
+  //       else{
+  //         this.IPAArr.push(response[0].tags[1].substring(9, response[0].tags[1].length))
+  //         console.log(("abandonado").match(this.syllableRegex))
+  //       }
+  //       console.log(this.IPAArr[index])
+  //       this.counter++
+  //       this.onClickIPA(index + 1)
+  //     })
+  //   }
+  // }  
+  
+//   onClickSpanish(index = 0) {
+//     this.fresharr = []
+//     this.temp = ''
+//     if(index == this.putWordsIntoArray(this.sentence).length) {
+//       this.updateCalls()
+//     } else {
+//       console.log(this.putWordsIntoArray(this.sentence)[index])
+//       if(this.putWordsIntoArray(this.sentence)[index]!=' '){
+//       this.freqWordsSpanishRef.child(this.putWordsIntoArray(this.sentence)[index]).once('value', (snapshot) => {
+//         if(snapshot.val() != null){
+//           this.splitArpabet(snapshot.val(), this.putWordsIntoArray(this.sentence)[index])
+//           console.log("in db")
+//         }
+//         else {
+//           this.http.get("https://api.datamuse.com/words?sp=" + this.putWordsIntoArray(this.sentence)[index] + "&md=r&max=1&v=es&ipa=1", { headers: this.headers }).subscribe(response => {
+//             this.counter++
+//             if(response[0]==null){
+//               this.fresharr.push(this.putWordsIntoArray(this.sentence)[index])
+//             }
+//             else{
+//               console.log("api call")
+//               this.freqWordsSpanishRef.update({ [this.putWordsIntoArray(this.sentence)[index].toLocaleLowerCase()] : response[0].tags[0].substring(5, response[0].tags[0].length-1)})
+//               this.splitArpabet(response[0].tags[0].substring(5, response[0].tags[0].length-1), this.putWordsIntoArray(this.sentence)[index])
+//             }
+//           })
+//         }
+//       })
+//     }
+//       this.onClickSpanish(index + 1)
+//     }
+//   }
+// }
+
+onClickSpanish(index = 0) {
+  this.fresharr = []
+  // // this.temp = ''
+  // console.log(this.temp + " " + index)
+  if(index == this.putWordsIntoArray(this.sentence).length) {
+    this.updateCalls()
+    this.splitArpabetCounter=0
+    this.temp = ''
+  } else {
+    // console.log(index)
+    this.freqWordsSpanishRef.child(this.putWordsIntoArray(this.sentence)[index]).once('value', (snapshot) => {
+      if(snapshot.val() != null){
+        this.splitArpabet(snapshot.val(), this.putWordsIntoArray(this.sentence).length)
+        console.log("in db " + snapshot.val())
+        this.onClickSpanish(index + 1)
+      }
+      else {
+        this.http.get("https://api.datamuse.com/words?sp=" + this.putWordsIntoArray(this.sentence)[index] + "&md=r&max=1&ipa=1", { headers: this.headers }).subscribe(response => {
+          this.counter++
+          if(response[0]==null){
+            this.splitArpabet(this.putWordsIntoArray(this.sentence)[index], this.putWordsIntoArray(this.sentence).length)
+            this.onClickSpanish(index + 1)
+          }
+          else{
+            this.freqWordsSpanishRef.update({ [this.putWordsIntoArray(this.sentence)[index].toLocaleLowerCase()] : response[0].tags[0].substring(5, response[0].tags[0].length-1)})
+            this.splitArpabet(response[0].tags[0].substring(5, response[0].tags[0].length-1), this.putWordsIntoArray(this.sentence).length)
+            console.log("api call " + response[0].tags[0].substring(5, response[0].tags[0].length-1))
+            this.onClickSpanish(index + 1)
+          }
+        })
+      }
+    })
+  }
+}
 }

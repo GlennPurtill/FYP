@@ -8,12 +8,11 @@ export class WebService {
     private headers = new HttpHeaders().set('Content-Type', 'application/json');
 
 
-    constructor(private http: HttpClient){ }
+
+    constructor(private http: HttpClient){ 
+    }
     
-    test(value) {
-       console.log("posting " + value)
-       return this.http.post(this.baseURL + '/test', value, {headers: this.headers}).subscribe(response =>{
-           console.log(response)
-        })
+    transSpanish(value) {
+       return this.http.post(this.baseURL + '/transSpanish?data=' + value, null)
     }
 }

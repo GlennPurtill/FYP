@@ -1,0 +1,96 @@
+/* annimations */
+@keyframes fade {
+    from {opacity: 0;}
+    to {opacity: 1;}
+}
+@keyframes fadeOut {
+    from {opacity: 1;}
+    to {opacity: 0;}
+}
+.particle{
+    /* animation-name: fade;
+    animation-duration: 3s; */
+}
+.logo{
+    position:absolute;
+    left: 0;
+    top: 0;
+    padding: 20px;
+    animation-name: fade;
+    animation-duration: 3s;
+}
+.container-fluid {
+    /* background-color: #b61924; */
+    color: white;
+}
+.left{
+    /* background-color: yellow; */
+    margin: 5px;
+}
+.right{
+    /* background-color: blue; */
+    margin: 5px;
+}
+.row {
+      height: 100vh;
+}
+
+textarea {
+    height: 44vh;
+    opacity: 1;
+}
+mat-radio-button{
+    margin-left: 10px;
+    font-size: 13px;
+}
+.new {
+    height: 50%;
+}
+.new1 {
+    height: 100%;
+    background-color: #ffffff96;
+    color: black;   
+    /* opacity: 0; */
+    animation-name: fade;
+    animation-duration: 3s;
+}
+.border{
+    border-color: rgba(0, 0, 0, 0);    
+}
+.selectarea{
+    height: 10%;
+    animation-name: fade;
+    animation-duration: 3s;
+}
+mat-radio-button{
+    color: white;
+}
+.pronun {
+    margin-left:5px;
+    font-size: 13px;
+}
+.btnSubmit{
+    margin-left: 5px;
+}
+.spinner{
+}
+.pronunSpan{
+}
+.actualPronun{
+    margin-top: 0%;
+}
+#overlay {
+    position: fixed; /* Sit on top of the page content */
+    display: none; /* Hidden by default */
+    width: 100%; /* Full width (cover the whole page) */
+    height: 100%; /* Full height (cover the whole page) */
+    top: 0; 
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.5); /* Black background with opacity */
+    z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
+    cursor: pointer; /* Add a pointer on hover */
+    animation-name: fade;
+    animation-duration: 1.5s;
+}

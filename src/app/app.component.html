@@ -1,14 +1,45 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <form class="container">
-    <label>Enter Sentence: </label>
-    <input class="input" (keyup)="onKey($event)"> 
-    <spanish></spanish>
-    <eng></eng>
-  </form>
-  <div>
-    {{finishedSentence}}
+<div id="overlay">
+    <div class="container-fluid" style="text-align:center">
+        <div class="row justify-content-center d-flex align-items-center">
+            <mat-spinner id="spinner" class="spinner d-flex align-items-center"></mat-spinner> 
+        </div>
+    </div>
+</div>
+<particles class="particle" [params]="myParams" [style]="myStyle" [width]="width" [height]="height"></particles>
+<div class="container-fluid" style="text-align:center">
+  <div class="logo">LOGO</div>
+  <div class="container col-sm-12">
+    <div class="row justify-content-center d-flex align-items-center">
+      <div class="col-sm-5 new" style="text-align:left">
+        <div class="selectarea">
+          <mat-radio-group>
+              <mat-radio-button (click)="RBchange('eng')" value="1">English</mat-radio-button>
+              <mat-radio-button (click)="RBchange('span')" value="2">Spanish</mat-radio-button>
+              <mat-radio-button (click)="RBchange('engspan')" value="3">Translate English to Spanish</mat-radio-button>
+          </mat-radio-group>
+          <button class="btnSubmit" (click)="submit()" mat-button>Click me!</button>
+        </div>
+          <div class="left new1 border-light rounded col-sm-12">
+            <mat-form-field class="left col-sm-12">
+             <textarea matInput style="resize: none;" placeholder={{TAMode}}  (keyup)="onKey($event)"></textarea>
+            </mat-form-field>
+        </div>
+      </div>
+      <div class="col-sm-5 new" style="text-align:left">
+        <div class="selectarea">
+         <span class="pronun" >Pronunciation:</span>
+        </div>
+        <div id="pronunArea" class="left new1 border-light rounded col-sm-12">            
+          <div id="pronunSpan" class="pronunSpan" style="visibility: hidden;">
+            <span>{{this.translatedSpanish}}</span>
+          </div>
+          <div class="actualPronun">
+            {{this.temp}}
+          </div>
+        </div>
+      </div>
+      
+    </div>
   </div>
 </div>
-
 

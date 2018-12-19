@@ -44,7 +44,7 @@ export class AppComponent {
     this.myParams = {
             particles: {
                 number: {
-                    value: 10,
+                    value: 50,
                 },
                 color: {
                     value: '#ffffff'

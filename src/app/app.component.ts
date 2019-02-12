@@ -65,8 +65,8 @@ export class AppComponent {
   TAMode = 'Pick a mode above'
   mode = ''
   pronunSentence = ''
-  arpabetRule = ['AE','AH','AO','AY','EY','UW','HH']
-  arpabetRuleSound = ['AH','AH','AW','IY','AY','EW','H']
+  arpabetRule = ['AE','AO','AY','EY','UW','HH','HAH','EH','AA','DH','OW','TH','ER','IH']
+  arpabetRuleSound = ['AH','AW','IY','AY','EW','H','HA','AY','AW','D','(O)','T','UR', 'I']
   splitArpabetCounter = 0
   translatedSpanish = ''
   freqWordsRef = firebase.database().ref('/freqwords');

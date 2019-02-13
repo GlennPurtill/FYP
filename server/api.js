@@ -69,14 +69,14 @@ api.post('/splitToPronun', (req, res, next) => {
     var temp = '';
     for(let x = 0; x < tempArr.length; x++){
         tempPronun = tempArr[x].replace(/ /g,'');
-        let arr = tempPronun.split('1');
+        let arr = tempPronun.split('0');
         for(let i = 0; i < arr.length; i++) {
           if(i>0 && arr[i] != ''){
             temp += '-'
           }
             for(let j = 0; j < arr[i].length; j++) {
-              if(arr[i].charAt(j) == '0'){
-                if(arr[i].charAt(j+3) == '0' || (arr[i].charAt(j+3) == '' && i < arr[i].length)){
+              if(arr[i].charAt(j) == '1'){
+                if(arr[i].charAt(j+3) == '1' || (arr[i].charAt(j+3) == '' && i < arr[i].length)){
                   temp += arr[i].substring(0, j) + '-'
                   arr[i] = arr[i].substring(j+1, arr[i].length)
                   j = 0

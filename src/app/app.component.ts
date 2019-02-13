@@ -65,6 +65,8 @@ export class AppComponent {
   TAMode = 'Pick a mode above'
   mode = ''
   pronunSentence = ''
+  arraypron = []
+  arraynor = []
   arpabetRule = ['AE','AO','AY','EY','UW','HH','HAH','EH','AA','DH','OW','TH','ER','IH','AH','AW']
   arpabetRuleSound = ['AH','AW','IY','AY','EW','H','HA','AY','AW','D','(O)','T','UR','I','A', 'OWE']
   splitArpabetCounter = 0
@@ -82,7 +84,7 @@ export class AppComponent {
   submit(){
     this.translatedSpanish = ''
     this.temp = ''
-    document.getElementById("pronunSpan").style.visibility = "hidden"    
+    // document.getElementById("pronunSpan").style.visibility = "hidden"    
     this.fresharr = []
     switch (this.mode){
       case 'eng': 
@@ -148,8 +150,9 @@ export class AppComponent {
   splitToPronun(){
     this.webService.splitToPronun(this.fresharr.toString()).subscribe(res => {
       console.log(res)
-      // document.getElementById("pronunArea").innerHTML = res.toString()
-      this.temp = res.toString().toLowerCase()
+      let temparray = res.toString().toLowerCase()
+      this.arraypron = temparray.split(" ")
+      this.arraynor = this.sentence.split(" ")
       document.getElementById("overlay").style.display = "none";  
       document.getElementById("overlay").style.animation = "fadeOut 1s";
     })

@@ -11,6 +11,11 @@
     /* animation-name: fade;
     animation-duration: 3s; */
 }
+.icon-bar{
+    position: fixed;
+    left: 0;
+        
+}
 .logo{
     position:absolute;
     left: 0;
@@ -27,6 +32,7 @@
     /* background-color: yellow; */
     margin: 5px;
 }
+
 .right{
     /* background-color: blue; */
     margin: 5px;

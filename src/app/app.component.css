@@ -24,7 +24,7 @@
     animation-duration: 3s;
 }
 .infobutton{
-    position: absolute;
+    /* position: absolute; */
     right: 0;
     top: 0;
     padding: 4px 12px;
@@ -38,8 +38,8 @@
     margin: 2px;
     margin-bottom: 10px;
     padding: 10px;
-    /* animation-name: fade;
-    animation-duration: 4s; */
+    animation-name: fade;
+    animation-duration: 4s;
 }
 .container-fluid {
     /* background-color: #b61924; */

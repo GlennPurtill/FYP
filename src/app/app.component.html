@@ -1,16 +1,21 @@
 <div id="overlay">
     <div class="container-fluid" style="text-align:center">
-        <div class="row justify-content-center d-flex align-items-center">
+        <div class="row row1 justify-content-center d-flex align-items-center">
             <mat-spinner id="spinner" class="spinner d-flex align-items-center"></mat-spinner> 
         </div>
     </div>
 </div>
+
 <!-- <particles class="particle" [params]="myParams" [style]="myStyle" [width]="width" [height]="height"></particles> -->
-<div class="container-fluid" style="text-align:center;background-color:rgb(68, 67, 67)">
-  
+<div ng-init="tester()" class="container-fluid" style="text-align:center;background-color:rgb(68, 67, 67)">
+  <button id="modalOpenButton" type="button" class="btn btn-primary" style="display:none" data-toggle="modal" data-target="#exampleModalLong">
+    Launch demo modal
+  </button>
+  <button type="button" class="btn btn-circle infobutton" data-toggle="modal" data-target="#exampleModalLong2"><i class="fa fa-info"></i>
+  </button>
   <div class="logo">LOGO</div>
   <div class="container col-sm-12">
-    <div class="row justify-content-center d-flex align-items-center">
+    <div class="row row1 justify-content-center d-flex align-items-center">
       <div class="col-sm-5 new" style="text-align:left">
         <div class="selectarea">
           <mat-radio-group>
@@ -26,6 +31,62 @@
             </mat-form-field>
         </div>
       </div>
+      <!-- Button trigger modal -->
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Pronunciations</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row justify-content-center col-12">
+        <div *ngFor="let item of arraypron; let i = index">
+          <div class="pronunborder border rounded" [ngStyle]="{ 'background-color' : getColor(i) }">
+            <div>
+              {{arraypron[i]}} 
+            </div>
+            <div>
+              {{arraynor[i]}}
+            </div>
+          </div>
+      </div>
+      </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModalLong2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Frequenty asked Questions</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <h5>Top tip</h5>
+        <p>Make sure to pronounce the word, not say a word. Example aw....</p>
+        <hr>
+        <h5>Tooltips in a modal</h5>
+        <p><a href="#" class="tooltip-test" title="Tooltip">This link</a> and <a href="#" class="tooltip-test" title="Tooltip">that link</a> have tooltips on hover.</p>
+        
+      </div>
+      <div class="modal-footer">
+       
+      </div>
+    </div>
+  </div>
+</div>
       <!-- <div class="col-sm-5 new" style="text-align:left">
         <div class="selectarea">
          <span class="pronun" >Pronunciation:</span>

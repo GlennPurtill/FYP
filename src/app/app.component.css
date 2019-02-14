@@ -14,7 +14,6 @@
 .icon-bar{
     position: fixed;
     left: 0;
-        
 }
 .logo{
     position:absolute;
@@ -23,6 +22,24 @@
     padding: 20px;
     animation-name: fade;
     animation-duration: 3s;
+}
+.infobutton{
+    position: absolute;
+    right: 0;
+    top: 0;
+    padding: 4px 12px;
+    animation-name: fade;
+    animation-duration: 3s;
+    margin: 15px 10px;
+    border-radius: 50%;
+}
+.pronunborder {
+    /* width: 10%; */
+    margin: 2px;
+    margin-bottom: 10px;
+    padding: 10px;
+    /* animation-name: fade;
+    animation-duration: 4s; */
 }
 .container-fluid {
     /* background-color: #b61924; */
@@ -33,11 +50,15 @@
     margin: 5px;
 }
 
+.modal {
+    color: black;
+}
+
 .right{
     /* background-color: blue; */
     margin: 5px;
 }
-.row {
+.row1 {
       height: 100vh;
 }
 

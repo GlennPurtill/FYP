@@ -34,4 +34,10 @@ export class WebService {
     updateAPICalls(value){
         return this.http.post(this.baseURL + '/updateAPICalls?data=' + value, null)
     }   
+    speakEn(value){
+        return this.http.post(this.baseURL + '/speakEn?data=' + value, null)
+    }
+    speakEs(value){
+        return this.http.post(this.baseURL + '/speakEn?data=' + value, null)
+    }
 }

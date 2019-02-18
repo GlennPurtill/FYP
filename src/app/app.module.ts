@@ -35,7 +35,7 @@ import { ParticlesModule } from 'angular-particle'
     MatIconModule,
     MatRadioModule,
     ParticlesModule,
-    MatProgressSpinnerModule 
+    MatProgressSpinnerModule
   ],
   providers: [WebService],
   bootstrap: [AppComponent]

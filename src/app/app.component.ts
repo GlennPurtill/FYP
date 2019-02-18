@@ -5,6 +5,7 @@ import { AngularFireDatabase, AngularFireList } from 'angularfire2/database'
 import { WebService } from '../services/webservice'
 import { MatSnackBar } from '@angular/material'
 import { MatSnackBarModule } from '@angular/material'
+
 import {
   trigger,
   state,
@@ -67,6 +68,7 @@ export class AppComponent {
   pronunSentence = ''
   arraypron = []
   arraynor = []
+  translatedSpanishArr = []
   arpabetRule = ['AE','AO','AY','EY','UW','HH','HAH','EH','AA','DH','OW','TH','ER','IH','AH','AW']
   arpabetRuleSound = ['AH','AW','IY','AY','EW','H','HA','AY','AW','D','(O)','T','UR','I','A', 'OWE']
   pronunColors = ['rgb(118, 45, 215)','rgb(50, 215, 45)','rgb(45, 50, 215)','#78A182','#C3E3CB','#E3E1C3','#5A583E','#9D2F2F','#9D9D2F','#2F959D','#A9C0C1','#B23C9A','#2DA4D7']
@@ -77,7 +79,6 @@ export class AppComponent {
   headers = new HttpHeaders().set('Content-Type', 'application/json');
   constructor(private http: HttpClient, private webService: WebService, private db : AngularFireDatabase, private snackBar: MatSnackBar) {
   }
-  
   onKey(event: any) { 
     this.sentence = event.target.value;
   }
@@ -86,14 +87,36 @@ export class AppComponent {
     return Math.floor(Math.random() * this.pronunColors.length-1)
   }
 
+  speakFullSentence(){
+    this.webService.speakEn(this.sentence).subscribe(res => {
+      console.log("done");
+    })
+  }
+
   getColor(i) {
     return this.pronunColors[i%this.pronunColors.length]
   }
 
+  divClicked(i){
+    if(this.mode == "span" || this.mode == "engspan"){
+
+      this.webService.speakEs(this.arraynor[i]).subscribe(res => {
+        console.log("done");
+     })
+
+    }
+    else {
+
+       this.webService.speakEn(this.arraynor[i]).subscribe(res => {
+          console.log("done");
+       })
+       
+    }
+   
+  }
   submit(){
     this.translatedSpanish = ''
     this.temp = ''
-    // document.getElementById("pronunSpan").style.visibility = "hidden"    
     this.fresharr = []
     switch (this.mode){
       case 'eng': 
@@ -138,13 +161,11 @@ export class AppComponent {
   //   })
   // }
 
-  //checks how many words are in the inputted string
   checkWordAmount(sentence){  
     var numWords = sentence.replace(/^\s+|\s+$/g,"").split(/\s+/).length;
     return numWords;
   } 
 
-  //puts words from input into an array
   putWordsIntoArray(sentence){
     var arr = this.sentence.split(' ');
     if(arr[0] == ''){
@@ -295,12 +316,14 @@ export class AppComponent {
     
     
     onClicktranslateSpan(){
-     this.webService.transSpanish(this.sentence).subscribe(res => {
+      this.webService.transSpanish(this.sentence).subscribe(res => {
       this.sentence = JSON.stringify(res).replace('"','')
       this.sentence = this.sentence.replace('"','')
       this.translatedSpanish = this.sentence
-      document.getElementById("pronunSpan").style.visibility = "visible"
+      console.log(this.translatedSpanishArr)
+      // document.getElementById("pronunSpan").style.visibility = "visible"
       this.onClickSpanish()
       })
      }
 }
+

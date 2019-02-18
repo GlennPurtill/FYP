@@ -5,6 +5,15 @@ const translate = require('@vitalets/google-translate-api');
 const firebase = require('firebase');
 const http = require('http');
 const axios = require('axios');
+const say = require('say');
+
+api.post('/speakEn', (req, res, next) => {
+    say.speak(req.query.data, 'Samantha', 0.9)
+});
+
+api.post('/speakEs', (req, res, next) => {
+    say.speak(req.query.data, 'Monica', 0.9)
+});
 
 var config = {
     apiKey: "AIzaSyBRpk0u-ZtYgPxJi_Fw0i1MVyTQgDRJUjg",

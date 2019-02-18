@@ -23,6 +23,16 @@
     animation-name: fade;
     animation-duration: 3s;
 }
+
+.playSounds{
+    margin-left: 5px;
+    margin-top: 0px;
+}
+
+.mt-pronuns{
+    margin-top: 3px;
+}
+
 .infobutton{
     /* position: absolute; */
     right: 0;

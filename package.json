@@ -51,7 +51,7 @@
     "pico-speaker": "0.0.7",
     "retext": "^5.0.0",
     "retext-syllable": "^1.0.0",
-    "rxjs": "^6.4.0",
+    "rxjs": "^6.3.3",
     "say": "^0.15.0",
     "speak-tts": "^2.0.8",
     "translate": "^1.0.4",

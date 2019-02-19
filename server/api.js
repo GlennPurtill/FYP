@@ -23,13 +23,6 @@ var database = firebase.database();
 
 api.use(cors())
 
-api.post('/speakEn', (req, res, next) => {
-    say.speak(req.query.data, 'Samantha', 0.9)
-});
-
-api.post('/speakEs', (req, res, next) => {
-    say.speak(req.query.data, 'Monica', 0.9)
-});
 
 api.post('/transSpanish', (req, res, next) => {
     translate(req.query.data, {to: 'es'}).then(response => {
@@ -61,6 +54,16 @@ api.post('/apiCallEng', (req, res, next) => {
             res.status('200').json(response.data[0].tags[0].substring(5, response.data[0].tags[0].length-1)); 
         }
     });
+});
+
+api.post('/speakEn', (req, res, next) => {
+    say.speak(req.query.data, 'Samantha', 0.9)
+    res.status('200')
+});
+
+api.post('/speakEs', (req, res, next) => {
+    say.speak(req.query.data, 'Monica', 0.9)
+    res.status('200')
 });
 
 api.post('/apiCallSpan', (req, res, next) => {

@@ -7,13 +7,7 @@ const http = require('http');
 const axios = require('axios');
 const say = require('say');
 
-api.post('/speakEn', (req, res, next) => {
-    say.speak(req.query.data, 'Samantha', 0.9)
-});
 
-api.post('/speakEs', (req, res, next) => {
-    say.speak(req.query.data, 'Monica', 0.9)
-});
 
 var config = {
     apiKey: "AIzaSyBRpk0u-ZtYgPxJi_Fw0i1MVyTQgDRJUjg",
@@ -28,6 +22,14 @@ firebase.initializeApp(config);
 var database = firebase.database();
 
 api.use(cors())
+
+api.post('/speakEn', (req, res, next) => {
+    say.speak(req.query.data, 'Samantha', 0.9)
+});
+
+api.post('/speakEs', (req, res, next) => {
+    say.speak(req.query.data, 'Monica', 0.9)
+});
 
 api.post('/transSpanish', (req, res, next) => {
     translate(req.query.data, {to: 'es'}).then(response => {

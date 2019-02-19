@@ -5,16 +5,6 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const path = require('path');
 
-// var googleTTS = require('google-tts-api');
-
-// googleTTS('Hello World i am an idiot', 'en', 1)   // speed normal = 1 (default), slow = 0.24
-// .then(function (url) {
-//  console.log(url); // https://translate.google.com/translate_tts?...
-// })
-// .catch(function (err) {
-//  console.error(err.stack);
-// });
-
   
 // mongoose.connect('mongodb://user01:dpr6371@ds233323.mlab.com:33323/fyp');
 

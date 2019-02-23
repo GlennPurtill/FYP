@@ -101,14 +101,14 @@ export class AppComponent {
     if(this.mode == "span" || this.mode == "engspan"){
 
       this.webService.speakEs(this.arraynor[i]).subscribe(res => {
-        console.log("done");
+        console.log(res);
      })
 
     }
     else {
 
        this.webService.speakEn(this.arraynor[i]).subscribe(res => {
-          console.log("done");
+          console.log(res);
        })
        
     }

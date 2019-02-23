@@ -57,13 +57,14 @@ api.post('/apiCallEng', (req, res, next) => {
 });
 
 api.post('/speakEn', (req, res, next) => {
-    say.speak(req.query.data, 'Samantha', 0.9)
-    res.status('200')
+    say.speak(req.query.data, 'Samantha', 0.9).then(response => {
+        res.status('200').json('done')
+     })
 });
 
 api.post('/speakEs', (req, res, next) => {
     say.speak(req.query.data, 'Monica', 0.9)
-    res.status('200')
+    res.status('200').json('success')
 });
 
 api.post('/apiCallSpan', (req, res, next) => {

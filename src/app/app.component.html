@@ -7,7 +7,7 @@
 </div>
 
 <!-- <particles class="particle" [params]="myParams" [style]="myStyle" [width]="width" [height]="height"></particles> -->
-<div ng-init="tester()" class="container-fluid" style="text-align:center;background-color:rgb(68, 67, 67)">
+<div ng-init="tester()" class="container-fluid" style="text-align:center;background-color:#677985">
   <button id="modalOpenButton" type="button" class="btn btn-primary" style="display:none" data-toggle="modal" data-target="#exampleModalLong">
     Launch demo modal
   </button>
@@ -16,12 +16,12 @@
   <div class="logo">LOGO</div>
   <div class="container col-sm-12">
     <div class="row row1 justify-content-center d-flex align-items-center">
-      <div class="col-sm-5 new" style="text-align:left">
+      <div class="col-sm-10 new" style="text-align:left">
         <div class="selectarea">
           <mat-radio-group>
-              <mat-radio-button (click)="RBchange('eng')" value="1">English</mat-radio-button>
-              <mat-radio-button (click)="RBchange('span')" value="2">Spanish</mat-radio-button>
-              <mat-radio-button (click)="RBchange('engspan')" value="3">Translate English to Spanish</mat-radio-button>
+              <mat-radio-button (click)="RBchange('eng')" value="1">English <i class="em em-flag-england"></i></mat-radio-button>
+              <mat-radio-button (click)="RBchange('span')" value="2">Spanish <i class="em em-flag-ea"></i></mat-radio-button>
+              <mat-radio-button (click)="RBchange('engspan')" value="3">Translate English <i class="em em-flag-england"></i> to Spanish <i class="em em-flag-ea"></i></mat-radio-button>
           </mat-radio-group>
           <button class="btnSubmit" (click)="submit()" mat-button>Click me!</button>
         </div>

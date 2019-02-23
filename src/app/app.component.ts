@@ -71,7 +71,7 @@ export class AppComponent {
   translatedSpanishArr = []
   arpabetRule = ['AE','AO','AY','EY','UW','HH','HAH','EH','AA','DH','OW','TH','ER','IH','AH','AW']
   arpabetRuleSound = ['AH','AW','IY','AY','EW','H','HA','AY','AW','D','(O)','T','UR','I','A', 'OWE']
-  pronunColors = ['rgb(118, 45, 215)','rgb(50, 215, 45)','rgb(45, 50, 215)','#78A182','#C3E3CB','#E3E1C3','#5A583E','#9D2F2F','#9D9D2F','#2F959D','#A9C0C1','#B23C9A','#2DA4D7']
+  pronunColors = ['#EEEEEE','#A7CECB','#9FB4C7','#759EB8','#C3E3CB','#EEEEFF','#A7CECB','#9FB4C7','#759EB8','#28587B','#D9D9E8','#89A9A7','#748391','#567386','#1E415A']
   splitArpabetCounter = 0
   translatedSpanish = ''
   freqWordsRef = firebase.database().ref('/freqwords');

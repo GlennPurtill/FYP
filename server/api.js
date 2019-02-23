@@ -7,8 +7,6 @@ const http = require('http');
 const axios = require('axios');
 const say = require('say');
 
-
-
 var config = {
     apiKey: "AIzaSyBRpk0u-ZtYgPxJi_Fw0i1MVyTQgDRJUjg",
     authDomain: "finalyearproject-33dd1.firebaseapp.com",
@@ -22,7 +20,6 @@ firebase.initializeApp(config);
 var database = firebase.database();
 
 api.use(cors())
-
 
 api.post('/transSpanish', (req, res, next) => {
     translate(req.query.data, {to: 'es'}).then(response => {
@@ -63,8 +60,9 @@ api.post('/speakEn', (req, res, next) => {
 });
 
 api.post('/speakEs', (req, res, next) => {
-    say.speak(req.query.data, 'Monica', 0.9)
-    res.status('200').json('success')
+    say.speak(req.query.data, 'Monica', 0.9).then(response => {
+        res.status('200').json('done')
+     })
 });
 
 api.post('/apiCallSpan', (req, res, next) => {
@@ -77,7 +75,6 @@ api.post('/apiCallSpan', (req, res, next) => {
         }
       })
 });
-
 
 api.post('/splitToPronun', (req, res, next) => {
     var tempArr = req.query.data.split(',');

@@ -50,6 +50,10 @@
     animation-name: fade;
     animation-duration: 4s;
 }
+
+.btn-download{
+    padding: 10px;
+}
 .container-fluid {
     /* background-color: #b61924; */
     color: white;

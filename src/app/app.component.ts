@@ -77,8 +77,10 @@ export class AppComponent {
   freqWordsRef = firebase.database().ref('/freqwords');
   freqWordsSpanishRef = firebase.database().ref('/freqwordsspanish');
   headers = new HttpHeaders().set('Content-Type', 'application/json');
+
   constructor(private http: HttpClient, private webService: WebService, private db : AngularFireDatabase, private snackBar: MatSnackBar) {
   }
+
   onKey(event: any) { 
     this.sentence = event.target.value;
   }
@@ -115,6 +117,7 @@ export class AppComponent {
    
   }
   submit(){
+
     this.translatedSpanish = ''
     this.temp = ''
     this.fresharr = []
@@ -181,6 +184,7 @@ export class AppComponent {
     this.webService.splitToPronun(this.fresharr.toString()).subscribe(res => {
       console.log(res)
       let temparray = res.toString().toLowerCase()
+      this.pronunSentence = temparray
       this.arraypron = temparray.split(" ")
       this.arraynor = this.sentence.split(" ")
       this.arraypron.pop()
@@ -235,53 +239,7 @@ export class AppComponent {
     }
   
 
-  // onClickEnglish(index = 0) {     
-  //     if(index == this.putWordsIntoArray(this.sentence).length) {
-  //       this.splitToPronun()
-  //       // this.updateCalls()
-  //       this.splitArpabetCounter=0
-  //       this.temp = ''
-  //       this.fresharr = []
-  //     } else {
-  //       this.webService.checkDB(this.putWordsIntoArray(this.sentence)[index]).subscribe(res => {
-  //         if(res != null){
-  //           // this.splitArpabet(res, this.putWordsIntoArray(this.sentence).length)
-  //           this.fresharr.push(res);
-  //           console.log(res)
-  //           this.onClickEnglish(index + 1)
-  //         }
-  //         else {
-  //           this.webService.apiCallEng(this.putWordsIntoArray(this.sentence)[index]).subscribe(res => {
-  //             this.counter++
-  //             if(res==null){
-  //               // this.splitArpabet(this.putWordsIntoArray(this.sentence)[index], this.putWordsIntoArray(this.sentence).length)
-  //               this.fresharr.push(this.putWordsIntoArray(this.sentence)[index]);
-  //               this.onClickEnglish(index + 1)
-  //             }
-  //             else{
-  //               let val = res.toString()
-  //               let ruledArp = ''
-  //               for(let i = 0; i < val.length; i++){
-                  
-  //                   if(this.arpabetRule.indexOf(val.charAt(i) + val.charAt(i+1)) >= 0){
-  //                     ruledArp += this.arpabetRuleSound[this.arpabetRule.indexOf(val.charAt(i) + val.charAt(i+1))]
-  //                     i++
-  //                   }
-  //                   else{
-  //                     ruledArp += val.charAt(i)
-  //                   }
-                  
-  //               }
-  //               this.freqWordsRef.update({ [this.putWordsIntoArray(this.sentence)[index].toLocaleLowerCase()] : ruledArp})
-  //               // this.splitArpabet(ruledArp, this.putWordsIntoArray(this.sentence).length)
-  //               this.fresharr.push(ruledArp);
-  //               this.onClickEnglish(index + 1)
-  //             }
-  //           })
-  //         }
-  //       })
-  //     }
-  //   }
+
   
 
     onClickSpanish(index = 0) {
@@ -325,5 +283,18 @@ export class AppComponent {
       this.onClickSpanish()
       })
      }
+
+     download() {
+        var element = document.createElement('a');
+        element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(this.pronunSentence));
+        element.setAttribute('download', 'pronunciations');
+    
+        element.style.display = 'none';
+        document.body.appendChild(element);
+    
+        element.click();
+    
+        document.body.removeChild(element);
+    }
 }
 

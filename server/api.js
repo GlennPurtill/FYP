@@ -7,6 +7,8 @@ const http = require('http');
 const axios = require('axios');
 const say = require('say');
 
+
+
 var config = {
     apiKey: "AIzaSyBRpk0u-ZtYgPxJi_Fw0i1MVyTQgDRJUjg",
     authDomain: "finalyearproject-33dd1.firebaseapp.com",
@@ -42,6 +44,20 @@ api.post('/checkSpanDB', (req, res, next) => {
     });
 });
 
+api.post('/speakEn', (req, res, next) => {
+    say.speak(req.query.data, 'Samantha', 0.7)
+    // .then(function(response){
+    //     res.status('200').json('done');
+    // });
+});
+
+api.post('/speakEs', (req, res, next) => {
+    say.speak(req.query.data, 'Monica', 0.7)
+    // .then(function(response){
+    //     res.status('200').json('done');
+    // });
+});
+
 api.post('/apiCallEng', (req, res, next) => {
     axios.get('https://api.datamuse.com/words?sp='+req.query.data+'&md=r&max=1&ipa=1').then(function (response) {
         if(response.data[0] == undefined){
@@ -51,18 +67,6 @@ api.post('/apiCallEng', (req, res, next) => {
             res.status('200').json(response.data[0].tags[0].substring(5, response.data[0].tags[0].length-1)); 
         }
     });
-});
-
-api.post('/speakEn', (req, res, next) => {
-    say.speak(req.query.data, 'Samantha', 0.9).then(response => {
-        res.status('200').json('done')
-     })
-});
-
-api.post('/speakEs', (req, res, next) => {
-    say.speak(req.query.data, 'Monica', 0.9).then(response => {
-        res.status('200').json('done')
-     })
 });
 
 api.post('/apiCallSpan', (req, res, next) => {
@@ -75,6 +79,7 @@ api.post('/apiCallSpan', (req, res, next) => {
         }
       })
 });
+
 
 api.post('/splitToPronun', (req, res, next) => {
     var tempArr = req.query.data.split(',');

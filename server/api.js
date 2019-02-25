@@ -45,17 +45,16 @@ api.post('/checkSpanDB', (req, res, next) => {
 });
 
 api.post('/speakEn', (req, res, next) => {
-    say.speak(req.query.data, 'Samantha', 0.7)
-    .then(function(response){
+    say.speak(req.query.data, 'Samantha', 0.7).then(response => {
         res.status('200').json('done');
-    });
+     })
 });
 
 api.post('/speakEs', (req, res, next) => {
     say.speak(req.query.data, 'Monica', 0.7)
-    .then(function(response){
+    .then(response => {
         res.status('200').json('done');
-    });
+     })
 });
 
 

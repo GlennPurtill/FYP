@@ -45,19 +45,12 @@ api.post('/checkSpanDB', (req, res, next) => {
 });
 
 api.post('/speakEn', (req, res, next) => {
-    say.speak(req.query.data, 'Samantha', 0.7).then(response => {
-        res.status('200').json('done');
-     })
+    say.speak(req.query.data, 'Samantha', 0.9)
 });
 
 api.post('/speakEs', (req, res, next) => {
-    say.speak(req.query.data, 'Monica', 0.7)
-    .then(response => {
-        res.status('200').json('done');
-     })
+    say.speak(req.query.data, 'Monica', 0.9)
 });
-
-
 api.post('/apiCallEng', (req, res, next) => {
     axios.get('https://api.datamuse.com/words?sp='+req.query.data+'&md=r&max=1&ipa=1').then(function (response) {
         if(response.data[0] == undefined){

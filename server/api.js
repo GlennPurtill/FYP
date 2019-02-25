@@ -46,6 +46,9 @@ api.post('/checkSpanDB', (req, res, next) => {
 
 api.post('/speakEn', (req, res, next) => {
     say.speak(req.query.data, 'Samantha', 0.9)
+    .then(function(response){
+        res.status('200').json('done');
+    });
 });
 
 api.post('/speakEs', (req, res, next) => {

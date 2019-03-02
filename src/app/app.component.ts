@@ -71,6 +71,9 @@ export class AppComponent {
   translatedSpanishArr = []
   arpabetRule = ['AE','AO','AY','EY','UW','HH','HAH','EH','AA','DH','OW','TH','ER','IH','AH','AW']
   arpabetRuleSound = ['AH','AW','IY','AY','EW','H','HA','AY','AW','D','(O)','T','UR','I','A', 'OWE']
+  arpabetRuleSpan = ['EH','TH','AA','RH']
+  arpabetRuleSoundSpan = ['AY','T','A','R']
+  
   pronunColors = ['#EEEEEE','#A7CECB','#9FB4C7','#759EB8','#C3E3CB','#EEEEFF','#A7CECB','#9FB4C7','#759EB8','#28587B','#D9D9E8','#89A9A7','#748391','#567386','#1E415A']
   splitArpabetCounter = 0
   translatedSpanish = ''
@@ -127,11 +130,30 @@ export class AppComponent {
     }
    
   }
-  submit(){
 
+  fixSentence(){
+    this.sentence = this.sentence.replace(/[^\w\s]/gi, '').replace(/  +/g, ' ')
+    if(this.sentence.charAt(0)==" "){
+      this.sentence = this.sentence.substring(1, this.sentence.length)
+      console.log("Space removed at start")
+    }
+    if(!(/^[a-zA-Z]+$/.test(this.sentence.charAt(this.sentence.length-1)))){
+      this.sentence = this.sentence.substring(0, this.sentence.length-1)
+      console.log("Space removed at end")
+    }
+    // console.log(this.sentence)
+    this.submit()
+  }
+
+
+  submit(){
     this.translatedSpanish = ''
     this.temp = ''
     this.fresharr = []
+
+    
+    // console.log(('this .  is great').replace(/  +/g, ' ').replace(/[^\w\s]/gi, ''))
+
     switch (this.mode){
       case 'eng': 
         this.onClickEnglish()
@@ -206,12 +228,14 @@ export class AppComponent {
     })
   }
   onClickEnglish(index = 0) {
+    // console.log(this.sentence.replace(/[^\w\s]/gi, '').replace(/  +/g, ' '))
       if(index == this.putWordsIntoArray(this.sentence).length) {
         this.splitArpabetCounter=0
         this.splitToPronun()
         this.temp = ''
         this.fresharr = []
       } else {
+        console.log(this.sentence[index])
         this.freqWordsRef.child(this.putWordsIntoArray(this.sentence)[index]).once('value', (snapshot) => {
           if(snapshot.val() != null){
             this.fresharr.push(snapshot.val())
@@ -273,8 +297,21 @@ export class AppComponent {
                 this.onClickSpanish(index + 1)
               }
               else{
-                this.freqWordsSpanishRef.update({ [this.putWordsIntoArray(this.sentence)[index].toLocaleLowerCase()] : response[0].tags[0].substring(5, response[0].tags[0].length-1)})
-                this.fresharr.push(response[0].tags[0].substring(5, response[0].tags[0].length-1));
+                let val = response[0].tags[0].substring(5, response[0].tags[0].length-1)
+                let ruledArp = ''
+                for(let i = 0; i < val.length; i++){
+                  
+                    if(this.arpabetRuleSpan.indexOf(val.charAt(i) + val.charAt(i+1)) >= 0){
+                      ruledArp += this.arpabetRuleSoundSpan[this.arpabetRuleSpan.indexOf(val.charAt(i) + val.charAt(i+1))]
+                      i++
+                    }
+                    else{
+                      ruledArp += val.charAt(i)
+                    }
+                  console.log(ruledArp)
+                }
+                this.freqWordsSpanishRef.update({ [this.putWordsIntoArray(this.sentence)[index].toLocaleLowerCase()] : ruledArp})
+                this.fresharr.push(ruledArp);
                 this.onClickSpanish(index + 1)
               }
             })

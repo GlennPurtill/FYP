@@ -46,7 +46,7 @@ api.post('/checkSpanDB', (req, res, next) => {
 
 api.post('/speakEn', (req, res, next) => {
     async function speakEn(){
-        await say.speak(req.query.data, 'Samantha', 0.9)
+        await say.speak(req.query.data, 'Samantha', 0.6)
         res.status('200').json(null);
     }
     speakEn()
@@ -54,7 +54,7 @@ api.post('/speakEn', (req, res, next) => {
 
 api.post('/speakEs', (req, res, next) => {
     async function speakEs(){
-        await say.speak(req.query.data, 'Monica', 0.9)
+        await say.speak(req.query.data, 'Monica', 0.6)
         res.status('200').json(null);
     }
     speakEs()

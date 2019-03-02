@@ -45,15 +45,21 @@ api.post('/checkSpanDB', (req, res, next) => {
 });
 
 api.post('/speakEn', (req, res, next) => {
-    say.speak(req.query.data, 'Samantha', 0.9)
-    .then(function(response){
-        res.status('200').json('done');
-    });
+    async function speakEn(){
+        await say.speak(req.query.data, 'Samantha', 0.9)
+        res.status('200').json(null);
+    }
+    speakEn()
 });
 
 api.post('/speakEs', (req, res, next) => {
-    say.speak(req.query.data, 'Monica', 0.9)
+    async function speakEs(){
+        await say.speak(req.query.data, 'Monica', 0.9)
+        res.status('200').json(null);
+    }
+    speakEs()
 });
+
 api.post('/apiCallEng', (req, res, next) => {
     axios.get('https://api.datamuse.com/words?sp='+req.query.data+'&md=r&max=1&ipa=1').then(function (response) {
         if(response.data[0] == undefined){

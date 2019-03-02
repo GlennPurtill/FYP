@@ -90,9 +90,20 @@ export class AppComponent {
   }
 
   speakFullSentence(){
-    this.webService.speakEn(this.sentence).subscribe(res => {
-      console.log("done");
-    })
+    if(this.mode == "span" || this.mode == "engspan"){
+      
+            this.webService.speakEs(this.sentence).subscribe(res => {
+              console.log(res);
+           })
+      
+          }
+          else {
+      
+             this.webService.speakEn(this.sentence).subscribe(res => {
+                console.log(res);
+             })
+             
+          }
   }
 
   getColor(i) {

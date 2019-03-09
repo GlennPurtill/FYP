@@ -54,11 +54,12 @@ api.post('/speakEn', (req, res, next) => {
 });
 
 api.post('/speakEs', (req, res, next) => {
+    speakEs()
     async function speakEs(){
         await say.speak(req.query.data, 'Monica', 0.6)
         res.status('200').json(null);
     }
-    speakEs()
+   
 });
 
 api.post('/apiCallEng', (req, res, next) => {

@@ -35,7 +35,6 @@ export class WebService {
         return this.http.post(this.baseURL + '/updateAPICalls?data=' + value, null)
     }   
     speakEn(value){
-        console.log(value)
         return this.http.post(this.baseURL + '/speakEn?data=' + value, null)
     }
     speakEs(value){

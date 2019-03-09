@@ -45,9 +45,9 @@ api.post('/checkSpanDB', (req, res, next) => {
 
 api.post('/speakEn', (req, res, next) => {
     //  speakEn()
-    //  res.status('200').json("done");
+     res.status('200').json("done");
     // async function speakEn(){
-        say.speak(req.query.data, 'Samantha', 0.6)
+        // say.speak(req.query.data, 'Samantha', 0.6)
     // }
 
    

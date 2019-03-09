@@ -286,12 +286,15 @@ export class AppComponent {
         this.splitArpabetCounter = 0
         this.temp = ''
       } else {
-        this.freqWordsSpanishRef.child(this.putWordsIntoArray(this.sentence)[index]).once('value', (snapshot) => {
+        console.log("in else")
+        this.freqWordsSpanishRef.child(this.putWordsIntoArray(this.sentence)[index].toLowerCase()).once('value', (snapshot) => {
+          console.log(snapshot.val())
           if(snapshot.val() != null){
             this.fresharr.push(snapshot.val());
             this.onClickSpanish(index + 1)
           }
           else {
+            console.log('api call')
             this.http.get("https://api.datamuse.com/words?sp=" + this.putWordsIntoArray(this.sentence)[index] + "&md=r&v=es&max=1&ipa=1", { headers: this.headers }).subscribe(response => {
               this.counter++
               if(response[0]==null){
@@ -328,7 +331,6 @@ export class AppComponent {
       this.sentence = JSON.stringify(res).replace('"','')
       this.sentence = this.sentence.replace('"','')
       this.translatedSpanish = this.sentence
-      console.log(this.translatedSpanishArr)
       // document.getElementById("pronunSpan").style.visibility = "visible"
       this.onClickSpanish()
       })

@@ -100,6 +100,7 @@ api.post('/splitToPronun', (req, res, next) => {
                   temp += arr[i].substring(0, j) + '-'
                   arr[i] = arr[i].substring(j+1, arr[i].length)
                   j = 0
+                  
                   if(arr[i].length == 1){
                     temp += arr[i].charAt(j)
                     arr[i] = arr[i].substring(j+1, arr[i].length)

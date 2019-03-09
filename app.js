@@ -20,7 +20,7 @@ app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'dist/FinalProject/index.html')); 
 });
 
-// const port = process.env.PORT || '8080';
+const port = process.env.PORT || '8080';
 app.set('port', port);
 
 const server = http.createServer(app);

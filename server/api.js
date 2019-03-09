@@ -49,6 +49,7 @@ api.post('/speakEn', (req, res, next) => {
         await say.speak(req.query.data, 'Samantha', 0.6)
         res.status('200').json(null);
     }
+    
     speakEn()
 });
 

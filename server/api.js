@@ -45,12 +45,13 @@ api.post('/checkSpanDB', (req, res, next) => {
 });
 
 api.post('/speakEn', (req, res, next) => {
-    // async function speakEn(){
+     speakEn()
+    async function speakEn(){
     //     await say.speak(req.query.data, 'Samantha', 0.6)
         res.status('200').json("done");
-    // }
+    }
 
-    // speakEn()
+   
 });
 
 api.post('/speakEs', (req, res, next) => {

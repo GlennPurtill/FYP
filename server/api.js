@@ -44,11 +44,11 @@ api.post('/checkSpanDB', (req, res, next) => {
 });
 
 api.post('/speakEn', (req, res, next) => {
-     speakEn()
-     res.status('200').json("done");
-    async function speakEn(){
+    //  speakEn()
+    //  res.status('200').json("done");
+    // async function speakEn(){
         say.speak(req.query.data, 'Samantha', 0.6)
-    }
+    // }
 
    
 });
@@ -57,7 +57,7 @@ api.post('/speakEs', (req, res, next) => {
     // speakEs()
     // async function speakEs(){
     //     await 
-        say.speak(req.query.data, 'Monica', 0.6)
+        // say.speak(req.query.data, 'Monica', 0.6)
         res.status('200').json(null);
     // }
    

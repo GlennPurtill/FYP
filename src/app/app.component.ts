@@ -15,6 +15,8 @@ import {
 } from '@angular/animations';
 declare var firebase: any;
 
+declare function speakEnglish() : any;
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -151,7 +153,7 @@ export class AppComponent {
     this.temp = ''
     this.fresharr = []
 
-    
+    speakEnglish()
     // console.log(('this .  is great').replace(/  +/g, ' ').replace(/[^\w\s]/gi, ''))
 
     switch (this.mode){

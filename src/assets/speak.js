@@ -1,7 +1,12 @@
+const msg = new SpeechSynthesisUtterance;
+msg.volume = 1;
+msg.rate = 1;
+msg.pitch = 1;
+msg.text = "Hello World";
 
-// const say = require('./node_modules/say');
+const voice = { "name" : "Alex", "lang" : "en-US"};
+msg.voiceURI = voice.name;
+msg.lang = voice.lang;
 function speakEnglish(){
-    // var audio = new Audio();
-    // audio.src ='http://translate.google.com/translate_tts?ie=utf-8&tl=en&q=Hello%20World.';
-    // audio.play();
+    speechSynthesis.speak(msg);
 }

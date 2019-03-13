@@ -131,6 +131,7 @@ export class AppComponent {
 
   fixSentence(){
     //1
+    speakEnglish()
     this.sentence = this.sentence.replace(/[^\w\s]/gi, '').replace(/  +/g, ' ')
     //2
     if(this.sentence.charAt(0)==" "){
@@ -150,7 +151,7 @@ export class AppComponent {
     this.temp = ''
     this.fresharr = []
 
-    speakEnglish()
+    // speakEnglish()
     // console.log(('this .  is great').replace(/  +/g, ' ').replace(/[^\w\s]/gi, ''))
 
     switch (this.mode){

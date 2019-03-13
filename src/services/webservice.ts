@@ -4,8 +4,8 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class WebService {
 
-    private baseURL = '/api';
-    // private baseURL = 'http://localhost:8080/api';
+    // private baseURL = '/api';
+    private baseURL = 'http://localhost:8080/api';
     private headers = new HttpHeaders().set('Content-Type', 'application/json');
 
 
@@ -38,7 +38,10 @@ export class WebService {
         return this.http.post(this.baseURL + '/speakEn?data=' + value, null)
     }
     speakEs(value){
-        return this.http.post(this.baseURL + '/speakEs?data=' + value, null)
+        console.log("here1")
+        this.http.post(this.baseURL + '/speakEs?data=' + value, null).subscribe(res => {
+            console.log(res)
+        })
     }
     // splitToPronunSpan
     splitToPronunSpan(value){

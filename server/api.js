@@ -54,13 +54,15 @@ api.post('/speakEn', (req, res, next) => {
 });
 
 api.post('/speakEs', (req, res, next) => {
-    setTimeout(speakEs, 1500)
-    console.log("start")
-    async function speakEs(){
-        await say.speak(req.query.data, 'Monica', 1)
-        console.log("done")
+    // setTimeout(speakEs, 1500)
+    // console.log("start")
+    // async function speakEs(){
+        // await 
+        // console.log("gere")
+        say.speak(req.query.data, 'Monica', 0.7)
+        // console.log("done")
         res.status('200').json(null);
-    }
+    // }
 });
 
 api.post('/apiCallEng', (req, res, next) => {

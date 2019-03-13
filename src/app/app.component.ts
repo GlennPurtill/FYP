@@ -97,9 +97,7 @@ export class AppComponent {
   speakFullSentence(){
     if(this.mode == "span" || this.mode == "engspan"){
       
-            this.webService.speakEs(this.sentence).subscribe(res => {
-              console.log(res);
-           })
+            this.webService.speakEs(this.sentence)
       
           }
           else {
@@ -118,9 +116,7 @@ export class AppComponent {
   divClicked(i){
     if(this.mode == "span" || this.mode == "engspan"){
 
-      this.webService.speakEs(this.arraynor[i]).subscribe(res => {
-        console.log(res);
-     })
+      this.webService.speakEs(this.arraynor[i])
 
     }
     else {

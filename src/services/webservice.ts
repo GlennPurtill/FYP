@@ -40,4 +40,8 @@ export class WebService {
     speakEs(value){
         return this.http.post(this.baseURL + '/speakEs?data=' + value, null)
     }
+    // splitToPronunSpan
+    splitToPronunSpan(value){
+        return this.http.post(this.baseURL + '/splitToPronunSpan?data=' + value, null)
+    }
 }

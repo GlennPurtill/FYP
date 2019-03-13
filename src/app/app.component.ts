@@ -134,16 +134,17 @@ export class AppComponent {
   }
 
   fixSentence(){
+    //1
     this.sentence = this.sentence.replace(/[^\w\s]/gi, '').replace(/  +/g, ' ')
+    //2
     if(this.sentence.charAt(0)==" "){
       this.sentence = this.sentence.substring(1, this.sentence.length)
-      console.log("Space removed at start")
     }
+    //3
     if(!(/^[a-zA-Z]+$/.test(this.sentence.charAt(this.sentence.length-1)))){
       this.sentence = this.sentence.substring(0, this.sentence.length-1)
-      console.log("Space removed at end")
     }
-    // console.log(this.sentence)
+    //4
     this.submit()
   }
 
@@ -216,18 +217,35 @@ export class AppComponent {
   }
 
   splitToPronun(){
-    this.webService.splitToPronun(this.fresharr.toString()).subscribe(res => {
-      console.log(res)
-      let temparray = res.toString().toLowerCase()
-      this.pronunSentence = temparray
-      this.arraypron = temparray.split(" ")
-      this.arraynor = this.sentence.split(" ")
-      this.arraypron.pop()
-      console.log(this.arraypron)
-      document.getElementById("modalOpenButton").click();
-      document.getElementById("overlay").style.display = "none";  
-      document.getElementById("overlay").style.animation = "fadeOut 1s";
-    })
+    if(this.mode == 'eng'){
+      this.webService.splitToPronun(this.fresharr.toString()).subscribe(res => {
+        console.log(res)
+        let temparray = res.toString().toLowerCase()
+        this.pronunSentence = temparray
+        this.arraypron = temparray.split(" ")
+        this.arraynor = this.sentence.split(" ")
+        this.arraypron.pop()
+        console.log(this.arraypron)
+        document.getElementById("modalOpenButton").click();
+        document.getElementById("overlay").style.display = "none";  
+        document.getElementById("overlay").style.animation = "fadeOut 1s";
+      })
+    }
+    else 
+    {
+      this.webService.splitToPronunSpan(this.fresharr.toString()).subscribe(res => {
+        console.log(res)
+        let temparray = res.toString().toLowerCase()
+        this.pronunSentence = temparray
+        this.arraypron = temparray.split(" ")
+        this.arraynor = this.sentence.split(" ")
+        this.arraypron.pop()
+        console.log(this.arraypron)
+        document.getElementById("modalOpenButton").click();
+        document.getElementById("overlay").style.display = "none";  
+        document.getElementById("overlay").style.animation = "fadeOut 1s";
+      })
+    }
   }
   onClickEnglish(index = 0) {
     // console.log(this.sentence.replace(/[^\w\s]/gi, '').replace(/  +/g, ' '))

@@ -54,13 +54,13 @@ api.post('/speakEn', (req, res, next) => {
 });
 
 api.post('/speakEs', (req, res, next) => {
-    // speakEs()
-    // async function speakEs(){
-    //     await 
-        // say.speak(req.query.data, 'Monica', 0.6)
+    setTimeout(speakEs, 1500)
+    console.log("start")
+    async function speakEs(){
+        await say.speak(req.query.data, 'Monica', 1)
+        console.log("done")
         res.status('200').json(null);
-    // }
-   
+    }
 });
 
 api.post('/apiCallEng', (req, res, next) => {
@@ -87,11 +87,51 @@ api.post('/apiCallSpan', (req, res, next) => {
 
 
 api.post('/splitToPronun', (req, res, next) => {
-    var tempArr = req.query.data.split(',');
-    var temp = '';
+    var tempArr = req.query.data.split(',')  
+    var temp = ''  
     for(let x = 0; x < tempArr.length; x++){
-        tempPronun = tempArr[x].replace(/ /g,'');
-        let arr = tempPronun.split('0');
+        tempPronun = tempArr[x].replace(/ /g,'')   
+        let arr = tempPronun.split('1')   
+        for(let i = 0; i < arr.length; i++) {
+          if(i>0 && arr[i] != ''){
+            temp += '-'
+          }
+            for(let j = 0; j < arr[i].length; j++) {
+              if(arr[i].charAt(j) == '0'){
+                if(arr[i].charAt(j+3) == '0' || (arr[i].charAt(j+3) == '' && i < arr[i].length)){
+                  temp += arr[i].substring(0, j) + '-'
+                  arr[i] = arr[i].substring(j+1, arr[i].length)
+                  j = 0
+                  if(arr[i].length == 1){
+                    temp += arr[i].charAt(j)
+                    arr[i] = arr[i].substring(j+1, arr[i].length)
+                  }
+                }
+                else {
+                  temp += arr[i].substring(0, j) + arr[i].substring(j+1, j+2) + '-'
+                  arr[i] = arr[i].substring(j+2, arr[i].length)
+                  j=0
+                }
+              } 
+              if(j == arr[i].length-1) {
+                temp += arr[i].substring(0, j+1)
+              }
+            }  
+        }
+        if(temp.charAt(temp.length-1) == '-'){
+         temp = temp.substring(0,temp.length-1)
+        }
+        temp += " "
+    }
+    res.status('200').json(temp); 
+});
+
+api.post('/splitToPronunSpan', (req, res, next) => {
+    var tempArr = req.query.data.split(',')  
+    var temp = ''  
+    for(let x = 0; x < tempArr.length; x++){
+        tempPronun = tempArr[x].replace(/ /g,'')   
+        let arr = tempPronun.split('0')   
         for(let i = 0; i < arr.length; i++) {
           if(i>0 && arr[i] != ''){
             temp += '-'

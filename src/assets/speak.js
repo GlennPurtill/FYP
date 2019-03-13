@@ -1,12 +1,25 @@
 const msg = new SpeechSynthesisUtterance;
 msg.volume = 1;
-msg.rate = 1;
 msg.pitch = 1;
-msg.text = "Hello World";
 
-const voice = { "name" : "Alex", "lang" : "en-US"};
-msg.voiceURI = voice.name;
-msg.lang = voice.lang;
-function speakEnglish(){
+function speakEnglish(content){
+    msg.rate = 0.6;
+    msg.text = content;
+    const voice = { "lang" : "en-IE"};
+    msg.lang = voice.lang;
+    speechSynthesis.speak(msg);
+}
+function speakSpanish(content){
+    msg.rate = 0.6;
+    msg.text = content;
+    const voice = { "lang" : "es-ES"};
+    msg.lang = voice.lang;
+    speechSynthesis.speak(msg);
+}
+function speakFullSpanish(content){
+    msg.rate = 1;
+    msg.text = content;
+    const voice = { "lang" : "es-ES"};
+    msg.lang = voice.lang;
     speechSynthesis.speak(msg);
 }

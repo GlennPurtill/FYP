@@ -45,6 +45,6 @@ export class WebService {
     }
     // splitToPronunSpan
     splitToPronunSpan(value){
-        return this.http.post(this.baseURL + '/splitToPronunSpan?data=' + value, null)
+        return this.http.post(this.baseURL + '/splitToPronun?data=' + value, null)
     }
 }

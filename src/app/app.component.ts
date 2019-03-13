@@ -15,8 +15,9 @@ import {
 } from '@angular/animations';
 declare var firebase: any;
 
-declare function speakEnglish() : any;
-
+declare function speakEnglish(content) : any;
+declare function speakSpanish(content) : any;
+declare function speakFullSpanish(content) : any;
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -96,17 +97,11 @@ export class AppComponent {
 
   speakFullSentence(){
     if(this.mode == "span" || this.mode == "engspan"){
-      
-            this.webService.speakEs(this.sentence)
-      
-          }
-          else {
-      
-             this.webService.speakEn(this.sentence).subscribe(res => {
-                console.log(res);
-             })
-             
-          }
+      speakFullSpanish(this.sentence)
+    }
+    else {
+      speakEnglish(this.sentence)
+    }
   }
 
   getColor(i) {
@@ -115,23 +110,16 @@ export class AppComponent {
 
   divClicked(i){
     if(this.mode == "span" || this.mode == "engspan"){
-
-      this.webService.speakEs(this.arraynor[i])
-
+      speakSpanish(this.arraynor[i])
     }
     else {
-
-       this.webService.speakEn(this.arraynor[i]).subscribe(res => {
-          console.log(res);
-       })
-       
+       speakEnglish(this.arraynor[i])
     }
    
   }
 
   fixSentence(){
     //1
-    speakEnglish()
     this.sentence = this.sentence.replace(/[^\w\s]/gi, '').replace(/  +/g, ' ')
     //2
     if(this.sentence.charAt(0)==" "){

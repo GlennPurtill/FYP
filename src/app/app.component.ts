@@ -18,6 +18,7 @@ declare var firebase: any;
 declare function speakEnglish(content) : any;
 declare function speakSpanish(content) : any;
 declare function speakFullSpanish(content) : any;
+declare function speakFullEnglish(content) : any;
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -100,7 +101,7 @@ export class AppComponent {
       speakFullSpanish(this.sentence)
     }
     else {
-      speakEnglish(this.sentence)
+      speakFullEnglish(this.sentence)
     }
   }
 

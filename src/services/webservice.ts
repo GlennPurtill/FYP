@@ -34,15 +34,15 @@ export class WebService {
     updateAPICalls(value){
         return this.http.post(this.baseURL + '/updateAPICalls?data=' + value, null)
     }   
-    speakEn(value){
-        return this.http.post(this.baseURL + '/speakEn?data=' + value, null)
-    }
-    speakEs(value){
-        console.log("here1")
-        this.http.post(this.baseURL + '/speakEs?data=' + value, null).subscribe(res => {
-            console.log(res)
-        })
-    }
+    // speakEn(value){
+    //     return this.http.post(this.baseURL + '/speakEn?data=' + value, null)
+    // }
+    // speakEs(value){
+    //     console.log("here1")
+    //     this.http.post(this.baseURL + '/speakEs?data=' + value, null).subscribe(res => {
+    //         console.log(res)
+    //     })
+    // }
     // splitToPronunSpan
     splitToPronunSpan(value){
         return this.http.post(this.baseURL + '/splitToPronun?data=' + value, null)

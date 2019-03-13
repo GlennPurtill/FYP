@@ -23,3 +23,10 @@ function speakFullSpanish(content){
     msg.lang = voice.lang;
     speechSynthesis.speak(msg);
 }
+function speakFullEnglish(content){
+    msg.rate = 1;
+    msg.text = content;
+    const voice = { "lang" : "en-IE"};
+    msg.lang = voice.lang;
+    speechSynthesis.speak(msg);
+}

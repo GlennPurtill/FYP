@@ -59,7 +59,11 @@ api.post('/speakEs', (req, res, next) => {
     // async function speakEs(){
         // await 
         // console.log("gere")
-        say.speak(req.query.data, 'Monica', 0.7)
+        say.speak(req.query.data, 'Monica', 0.7, function(err) {
+            if (err) {
+                return console.error(err);
+            }
+        })
         // console.log("done")
         res.status('200').json(null);
     // }

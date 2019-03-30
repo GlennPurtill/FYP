@@ -6,124 +6,126 @@
     </div>
 </div>
 
-<!-- <particles class="particle" [params]="myParams" [style]="myStyle" [width]="width" [height]="height"></particles> -->
-<div ng-init="tester()" class="container-fluid" style="text-align:center;background-color:#677985">
-  <button id="modalOpenButton" type="button" class="btn btn-primary" style="display:none" data-toggle="modal" data-target="#exampleModalLong">
-    Launch demo modal
-  </button>
-  <button type="button" class="btn btn-circle infobutton" data-toggle="modal" data-target="#exampleModalLong2"><i class="fa fa-info"></i>
-  </button>
-  <div class="logo">LOGO</div>
-  <div class="container col-sm-12">
-    <div class="row row1 justify-content-center d-flex align-items-center">
-      <div class="col-sm-10 new" style="text-align:left">
-        <div class="selectarea">
-          <mat-radio-group>
-              <mat-radio-button (click)="RBchange('eng')" value="1">English <i class="em em-flag-england"></i></mat-radio-button>
-              <mat-radio-button (click)="RBchange('span')" value="2">Spanish <i class="em em-flag-ea"></i></mat-radio-button>
-              <mat-radio-button (click)="RBchange('engspan')" value="3">Translate English <i class="em em-flag-england"></i> to Spanish <i class="em em-flag-ea"></i></mat-radio-button>
-          </mat-radio-group>
-          <button class="btnSubmit" (click)="fixSentence()" mat-button>Click me!</button>
-        </div>
-          <div class="left new1 border-light rounded col-sm-12">
-            <mat-form-field class="left col-sm-12">
-             <textarea matInput style="resize: none;" placeholder={{TAMode}}  (keyup)="onKey($event)"></textarea>
-            </mat-form-field>
-        </div>
-      </div>
-      <!-- Button trigger modal -->
+  <nav class="navbar navbar-expand-lg navbar-light fixed-top">
+    <a class="navbar-brand" href="#"><b><span class="phonetic">Phonetic</span></b> <span class="translator">Translator</span></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  
+    <button id="modalOpenButton" type="button" data-toggle="modal" data-target="#exampleModalLong2" class="far fa-question-circle ml-auto"></button> 
+    <button id="modalOpenButton3" type="button" data-toggle="modal" style="display:none" data-target="#exampleModalLong3" class="far fa-question-circle ml-auto"></button> 
+  </nav>
 
 
-<!-- Modal -->
-<div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title mt-pronuns" id="exampleModalLongTitle">Pronunciations</h5>
-        <button type="button" class="btn btn-circle class playSounds" (click)="speakFullSentence()"><i class="fa fa-volume-up"></i>
-        </button>
-        <button class="btn-download" (click)="download()" mat-button>Download</button>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <div class="row justify-content-center col-12">
-        <div *ngFor="let item of arraypron; let i = index">
-          <div class="pronunborder border rounded" (click)="divClicked(i)" [ngStyle]="{ 'background-color' : getColor(i) }">
-            <div>
-              {{arraypron[i]}} 
-            </div>
-            <div>
-              {{arraynor[i]}}
-            </div>
-          </div>
-      </div>
-      </div>
-      </div>
+<div class="container-fluid main-container">
+
+  <div class="buttons-container fixed-bottom d-flex justify-content-center text-center">
+    <div class="col-1" [@zoomIcon]="zoomState1">
+      <button [disabled]="checkDisabledEng() == yes"  (mouseover)="toggleZoomState(1)" id="engBut" (mouseout)="toggleZoomState(1)" (click)="fixSentence('eng')" class="flag-img-btn"><img src="./../assets/united-kingdom.png" class="flag-img" alt=""></button>
+      <p class="flag-img-txt">English</p>
     </div>
+    <div class="col-1"  [@zoomIcon]="zoomState2">
+        <button [disabled]="checkDisabledSpan() == yes" (mouseover)="toggleZoomState(2)" (mouseout)="toggleZoomState(2)" id="spanBut" (click)="fixSentence('span')" class="flag-img-btn"><img src="./../assets/spain.png" class="flag-img" alt=""></button>
+        <p class="flag-img-txt">Spanish</p>
+    </div>
+    <div class="col-1"  [@zoomIcon]="zoomState3">
+        <button [disabled]="checkDisabledEng() == yes" (mouseover)="toggleZoomState(3)" (mouseout)="toggleZoomState(3)" id="engSpanBut" (click)="fixSentence('engspan')" class="flag-img-btn"><img src="./../assets/engspain.png" class="flag-img" alt=""></button>
+        <p class="flag-img-txt">Spanish Traslation</p>
+    </div>
+    <!-- <div class="col-1">
+        <button><img src="./../assets/united-kingdom.png" class="flag-img" alt=""> <img src="./../assets/spain.png" class="flag-img" alt=""></button>
+    </div> -->
+  </div>
+
+  <div class="row">
+        
+      <div class="col-10 top-row">
+          <h2 class="cringe">Input text! Pick a flag! Get your phonetics!</h2>
+      </div>
+      <div class="col-2 d-flex align-items-end">
+          <mat-slide-toggle class="mat-slide-toggle" (change)="onLangToggle()">{{ language }}</mat-slide-toggle>
+          <i id="undoBut" (click)="undo()" class="fas fa-undo-alt ml-3"></i>
+          <i id="speakBut" (click)="speakFullSentence()" class="fa fa-volume-up ml-3"></i>
+          <i id="downBut" (click)="download()" class="fas fa-download ml-3"></i>
+      </div>
+  </div>
+
+  <div class="row main-row">
+        <div class="col-12 main-tb-c">
+            <textarea id="ta" [(ngModel)]="sentence" placeholder="{{placeholder}}"></textarea>      
+        </div>
   </div>
 </div>
-
 
 <!-- Modal -->
 <div class="modal fade" id="exampleModalLong2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg¸" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">Frequenty asked Questions</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <h5>question area</h5>
-        <p>answer area</p>
-        <hr>
-        <h5>question area</h5>
-        <p>answer area.</p>
-        <hr>
-        <h5>question area</h5>
-        <p>answer area</p>
-        <hr>
-        <h5>question area</h5>
-        <p>answer area.</p>
-        <hr>
-        <h5>question area</h5>
-        <p>answer area</p>
-        <hr>
-        <h5>question area</h5>
-        <p>answer area.</p>
-        <hr>
-        <h5>question area</h5>
-        <p>answer area</p>
-        <hr>
-        <h5>question area</h5>
-        <p>answer area.</p>
-        
-        
-      </div>
-      <div class="modal-footer">
-       
+    <div class="modal-dialog modal-dialog-centered modal-lg¸" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Frequenty asked Questions</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <h5>question area</h5>
+          <p>answer area</p>
+          <hr>
+          <h5>question area</h5>
+          <p>answer area.</p>
+          <hr>
+          <h5>question area</h5>
+          <p>answer area</p>
+          <hr>
+          <h5>question area</h5>
+          <p>answer area.</p>
+          <hr>
+          <h5>question area</h5>
+          <p>answer area</p>
+          <hr>
+          <h5>question area</h5>
+          <p>answer area.</p>
+        </div>
       </div>
     </div>
   </div>
-</div>
-      <!-- <div class="col-sm-5 new" style="text-align:left">
-        <div class="selectarea">
-         <span class="pronun" >Pronunciation:</span>
-        </div>
-        <div id="pronunArea" class="left new1 border-light rounded col-sm-12">            
-          <div id="pronunSpan" class="pronunSpan" style="visibility: hidden;">
-            <span>{{this.translatedSpanish}}</span>
-          </div>
-          <div class="actualPronun">
-            {{this.temp}}
-          </div>
-        </div>
-      </div> -->
-      
-    </div>
-  </div>
-</div>
 
+  <div class="modal fade" id="exampleModalLong3" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-lg¸" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle"><b>Welcome to <span class="phonetic">Phonetic</span></b> <span class="translator">Translator</span><br><span class="sechead">Your very own PT!</span></h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p class="intro">Phonetic translator is a tool that helps users with with their pronunciations of words in either english or spanish.</p>
+            <p class="intro">Users have the option to get phonetics in the language of their choice!</p>
+            <p class="intro">Follow these steps to use the app:</p>
+            <div class="steps">
+                <p class="intro"><b>1.</b> Pick an input mode!</p>
+                <div class="innersteps">
+                    <p class="intro">Use the toggle <img src="./../assets/toggle1.png" class="toggleimg"> on the right of the screen to pick an input mode!</p>
+                </div>
+                <p class="intro"><b>2.</b> Write an input in your chosen language!</p>
+                <p class="intro"><b>3.</b> Pick an output!</p>
+                <div class="innersteps">
+                    <p class="intro">Pick an output at the bottom of the screen! Outputs in English and Spanish are available when english is selected in step 1!
+                        <img src="./../assets/outputs.png" class="outputimg">
+                    </p>
+                </div>
+                <p class="intro"><b>4.</b>Get your Phonetics!</p>
+                <div class="innersteps">
+                    <p class="intro">Your requested phonetics will apear to the screen!</p>
+                </div>
+                <p class="intro"><b>5.</b>Listen or Download your phonetics!</p>
+                <div class="innersteps">
+                    <p class="intro">Use <i class="fa fa-volume-up"></i> to listen and <i class="fas fa-download"></i> to download your phonetics located on the right of the screen!</p>
+                </div>
+                <p class="intro">For more information hit <i class="far fa-question-circle"></i></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>

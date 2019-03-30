@@ -5,7 +5,6 @@ import { AngularFireDatabase, AngularFireList } from 'angularfire2/database'
 import { WebService } from '../services/webservice'
 import { MatSnackBar } from '@angular/material'
 import { MatSnackBarModule } from '@angular/material'
-
 import {
   trigger,
   state,
@@ -19,65 +18,53 @@ declare function speakEnglish(content) : any;
 declare function speakSpanish(content) : any;
 declare function speakFullSpanish(content) : any;
 declare function speakFullEnglish(content) : any;
+declare function start() : any;
+declare function end(db,api,n) : any;
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
+  animations: [
+    trigger("zoomIcon", [
+      state('original', style({
+        transform: "scale(1)"
+      })),
+      state('zoomed', style({
+        transform: "scale(1.1)"
+      })),
+
+      transition('original => zoomed', animate("200ms")),
+      transition('zoomed => original', animate("200ms ease-in"))
+    ])
+  ]
 })
 export class AppComponent {
 
+  zoomState1 = "original"
+  zoomState2 = "original"
+  zoomState3 = "original"
 
-  //Particles start
-  myStyle: object = {};
-  myParams: object = {};
-  width: number = 100;
-  height: number = 100;
 
-  ngOnInit() {
-      this.myStyle = {
-          'position': 'fixed',
-          'width': '100%',
-          'height': '100%',
-          'z-index': -1,
-          'top': 0,
-          'left': 0,
-          'right': 0,
-          'bottom': 0,
-          'background-color': '#b61924'
-      };
-
-    this.myParams = {
-            particles: {
-                number: {
-                    value: 50,
-                },
-                color: {
-                    value: '#ffffff'
-                },
-                shape: {
-                    type: 'triangle',
-                },
-        }
-    };
-  }
-  //Particles end
-
+  language = "English"
   sentence = ''
+  initialSentence
   counter = 0
   fresharr = []
   temp = ''
+  trig = ''
   data= ''
   TAMode = 'Pick a mode above'
   mode = ''
   pronunSentence = ''
   arraypron = []
   arraynor = []
+  placeholder = 'Enter English'
   translatedSpanishArr = []
   arpabetRule = ['AE','AO','AY','EY','UW','HH','HAH','EH','AA','DH','OW','TH','ER','IH','AH','AW']
   arpabetRuleSound = ['AH','AW','IY','AY','EW','H','HA','AY','AW','D','(O)','T','UR','I','A', 'OWE']
   arpabetRuleSpan = ['EH','TH','AA','RH']
   arpabetRuleSoundSpan = ['AY','T','A','R']
-  
   pronunColors = ['#EEEEEE','#A7CECB','#9FB4C7','#759EB8','#C3E3CB','#EEEEFF','#A7CECB','#9FB4C7','#759EB8','#28587B','#D9D9E8','#89A9A7','#748391','#567386','#1E415A']
   splitArpabetCounter = 0
   translatedSpanish = ''
@@ -85,19 +72,62 @@ export class AppComponent {
   freqWordsSpanishRef = firebase.database().ref('/freqwordsspanish');
   headers = new HttpHeaders().set('Content-Type', 'application/json');
 
+  areinDB = 0
+  apiCALL = 0
+
   constructor(private http: HttpClient, private webService: WebService, private db : AngularFireDatabase, private snackBar: MatSnackBar) {
   }
 
-  onKey(event: any) { 
-    this.sentence = event.target.value;
+  ngOnInit(){
+    if(document.cookie){
+      document.cookie = 'visted'
+      console.log("here " + document.cookie)
+      document.getElementById('modalOpenButton3').click()
+    }
+
+    
+  }
+
+  toggleZoomState(x) {
+    switch(x) {
+      case 1: this.zoomState1 = this.zoomState1 == "original" ? "zoomed" : "original"; break;
+      case 2: this.zoomState2 = this.zoomState2 == "original" ? "zoomed" : "original"; break;
+      case 3: this.zoomState3 = this.zoomState3 == "original" ? "zoomed" : "original"; break;
+    }
+    
+  }
+
+  onLangToggle() {
+    switch(this.language) {
+      case "English": this.language = "Spanish"; this.placeholder = "Enter Spanish" ; break; 
+      case "Spanish": this.language = "English" ; this.placeholder = "Enter English";  break;
+    }
   }
   
   ranNum(){
     return Math.floor(Math.random() * this.pronunColors.length-1)
   }
+  checkDisabledSpan(){
+    this.checkTriggered()
+    if(this.language == "Spanish"){
+      document.getElementById('engBut').style.opacity= '0.3';
+      document.getElementById('engSpanBut').style.opacity= '0.3';
+      document.getElementById('spanBut').style.opacity= '1';
+      return "yes";
+    }
+  }
+  checkDisabledEng(){
+    this.checkTriggered()
+    if(this.language == "English"){
+      document.getElementById('spanBut').style.opacity= '0.3';
+      document.getElementById('engBut').style.opacity= '1';
+      document.getElementById('engSpanBut').style.opacity= '1';
+      return "yes";
+    }
+  }
 
   speakFullSentence(){
-    if(this.mode == "span" || this.mode == "engspan"){
+    if(this.mode == "engspan" || this.mode == "span"){
       speakFullSpanish(this.sentence)
     }
     else {
@@ -119,10 +149,34 @@ export class AppComponent {
    
   }
 
-  fixSentence(){
+  undo() {
+    if(this.initialSentence != undefined){
+      this.trig = ""
+      document.getElementById("ta")['value'] = this.initialSentence
+    }
+    
+  }
+
+  checkTriggered(){
+    if(this.trig == "triggered"){
+      document.getElementById('undoBut').style.opacity= '1';
+      document.getElementById('downBut').style.opacity= '1';
+      document.getElementById('speakBut').style.opacity= '1';
+    }
+    else {
+      document.getElementById('undoBut').style.opacity= '0.2';
+      document.getElementById('downBut').style.opacity= '.2';
+      document.getElementById('speakBut').style.opacity= '.2';
+    }
+  }
+
+  fixSentence(t){
+    this.trig = "triggered"
+    this.initialSentence = this.sentence
     //1
     this.sentence = this.sentence.replace(/[^\w\s]/gi, '').replace(/  +/g, ' ')
     //2
+    this.mode = t
     if(this.sentence.charAt(0)==" "){
       this.sentence = this.sentence.substring(1, this.sentence.length)
     }
@@ -146,15 +200,15 @@ export class AppComponent {
     switch (this.mode){
       case 'eng': 
         this.onClickEnglish()
-        document.getElementById("overlay").style.display = "block";
+        // document.getElementById("overlay").style.display = "block";
         break;
       case 'span':
         this.onClickSpanish()
-        document.getElementById("overlay").style.display = "block";
+        // document.getElementById("overlay").style.display = "block";
         break;
       case 'engspan':
         this.onClicktranslateSpan()
-        document.getElementById("overlay").style.display = "block";
+        // document.getElementById("overlay").style.display = "block";
         break;
       case '':
       let snackBarRef = this.snackBar.open('Please pick a mode!', 'Close', {
@@ -177,7 +231,7 @@ export class AppComponent {
         this.TAMode = 'Enter English to translate to Spanish'
         break;
     }
-    console.log(this.mode)
+    // console.log(this.mode)
   }
 
   // updateCalls(){
@@ -203,36 +257,13 @@ export class AppComponent {
   }
 
   splitToPronun(){
-    if(this.mode == 'eng'){
       this.webService.splitToPronun(this.fresharr.toString()).subscribe(res => {
         console.log(res)
-        let temparray = res.toString().toLowerCase()
-        this.pronunSentence = temparray
-        this.arraypron = temparray.split(" ")
-        this.arraynor = this.sentence.split(" ")
-        this.arraypron.pop()
-        console.log(this.arraypron)
-        document.getElementById("modalOpenButton").click();
-        document.getElementById("overlay").style.display = "none";  
-        document.getElementById("overlay").style.animation = "fadeOut 1s";
+        document.getElementById("ta")['value'] = res.toString().toLowerCase()
       })
     }
-    else 
-    {
-      this.webService.splitToPronunSpan(this.fresharr.toString()).subscribe(res => {
-        console.log(res)
-        let temparray = res.toString().toLowerCase()
-        this.pronunSentence = temparray
-        this.arraypron = temparray.split(" ")
-        this.arraynor = this.sentence.split(" ")
-        this.arraypron.pop()
-        console.log(this.arraypron)
-        document.getElementById("modalOpenButton").click();
-        document.getElementById("overlay").style.display = "none";  
-        document.getElementById("overlay").style.animation = "fadeOut 1s";
-      })
-    }
-  }
+  
+
   onClickEnglish(index = 0) {
     // console.log(this.sentence.replace(/[^\w\s]/gi, '').replace(/  +/g, ' '))
       if(index == this.putWordsIntoArray(this.sentence).length) {
@@ -241,11 +272,12 @@ export class AppComponent {
         this.temp = ''
         this.fresharr = []
       } else {
-        console.log(this.sentence[index])
+        // console.log(this.sentence[index])
         this.freqWordsRef.child(this.putWordsIntoArray(this.sentence)[index]).once('value', (snapshot) => {
           if(snapshot.val() != null){
+            this.areinDB++
             this.fresharr.push(snapshot.val())
-            console.log(snapshot.val())
+            // console.log(snapshot.val())
             this.onClickEnglish(index + 1)
           }
           else {
@@ -271,6 +303,7 @@ export class AppComponent {
                 }
                 this.freqWordsRef.update({ [this.putWordsIntoArray(this.sentence)[index].toLocaleLowerCase()] : ruledArp})
                 this.fresharr.push(ruledArp);
+                this.apiCALL++
                 this.onClickEnglish(index + 1)
               }
             })
@@ -290,15 +323,17 @@ export class AppComponent {
         this.splitArpabetCounter = 0
         this.temp = ''
       } else {
-        console.log("in else")
+        // console.log("in else")
         this.freqWordsSpanishRef.child(this.putWordsIntoArray(this.sentence)[index].toLowerCase()).once('value', (snapshot) => {
-          console.log(snapshot.val())
+          // console.log(snapshot.val())
+
           if(snapshot.val() != null){
+            this.areinDB++
             this.fresharr.push(snapshot.val());
             this.onClickSpanish(index + 1)
           }
           else {
-            console.log('api call')
+            // console.log('api call')
             this.http.get("https://api.datamuse.com/words?sp=" + this.putWordsIntoArray(this.sentence)[index] + "&md=r&v=es&max=1&ipa=1", { headers: this.headers }).subscribe(response => {
               this.counter++
               if(response[0]==null){
@@ -317,10 +352,11 @@ export class AppComponent {
                     else{
                       ruledArp += val.charAt(i)
                     }
-                  console.log(ruledArp)
+                  // console.log(ruledArp)
                 }
                 this.freqWordsSpanishRef.update({ [this.putWordsIntoArray(this.sentence)[index].toLocaleLowerCase()] : ruledArp})
                 this.fresharr.push(ruledArp);
+                this.apiCALL++
                 this.onClickSpanish(index + 1)
               }
             })
@@ -344,13 +380,10 @@ export class AppComponent {
         var element = document.createElement('a');
         element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(this.pronunSentence));
         element.setAttribute('download', 'pronunciations');
-    
         element.style.display = 'none';
         document.body.appendChild(element);
-    
         element.click();
-    
         document.body.removeChild(element);
-    }
+     }
 }
 

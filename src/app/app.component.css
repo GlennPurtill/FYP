@@ -1,126 +1,24 @@
-/* annimations */
-@keyframes fade {
-    from {opacity: 0;}
-    to {opacity: 1;}
-}
-@keyframes fadeOut {
-    from {opacity: 1;}
-    to {opacity: 0;}
-}
-.particle{
-    /* animation-name: fade;
-    animation-duration: 3s; */
-}
-.icon-bar{
-    position: fixed;
-    left: 0;
-}
-.logo{
-    position:absolute;
-    left: 0;
-    top: 0;
-    padding: 20px;
-    animation-name: fade;
-    animation-duration: 3s;
+@import url('https://fonts.googleapis.com/css?family=Raleway');
+@import url('https://fonts.googleapis.com/css?family=Squada+One');
+.navbar-brand{
+    font-family: 'Raleway', sans-serif;
 }
 
-.playSounds{
-    margin-left: 5px;
-    margin-top: 0px;
+.mat-slide-toggle{
+    font-family: 'Raleway', sans-serif;
 }
 
-.mt-pronuns{
-    margin-top: 3px;
+
+.translator{
+    font-size: 14px;
+    color: rgba(0, 0, 0, 0.474);
 }
 
-.infobutton{
-    position: absolute;
-    right: 0;
-    padding: 4px 12px;
-    animation-name: fade;
-    animation-duration: 3s;
-    margin: 15px 10px;
-    border-radius: 50%;
-}
-.pronunborder {
-    /* width: 10%; */
-    margin: 2px;
-    margin-bottom: 10px;
-    padding: 10px;
-    animation-name: fade;
-    animation-duration: 4s;
+.phonetic{
+    font-family: 'Squada', sans-serif;
+    color: #083F5D;
 }
 
-.btn-download{
-    padding: 10px;
-}
-.container-fluid {
-    /* background-color: #b61924; */
-    color: white;
-}
-.left{
-    /* background-color: yellow; */
-    padding: 5px;
-}
-
-.modal {
-    color: black;
-}
-
-.right{
-    /* background-color: blue; */
-    margin: 5px;
-}
-.row1 {
-      height: 100vh;
-}
-
-textarea {
-    height: 44vh;
-    opacity: 1;
-}
-mat-radio-button{
-    margin-left: 10px;
-    font-size: 13px;
-}
-.new {
-    height: 50%;
-}
-.new1 {
-    height: 100%;
-    background-color: #ffffff96;
-    color: black;   
-    /* opacity: 0; */
-    animation-name: fade;
-    animation-duration: 3s;
-}
-.border{
-    border-color: rgba(0, 0, 0, 0);    
-}
-.selectarea{
-    height: 10%;
-    animation-name: fade;
-    animation-duration: 3s;
-}
-mat-radio-button{
-    color: white;
-}
-.pronun {
-    margin-left:5px;
-    font-size: 13px;
-}
-.btnSubmit{
-    position: absolute;
-    right: 0;
-    margin-left: 5px;
-}
-.spinner{
-}
-.pronunSpan{
-}
-.actualPronun{
-    margin-top: 0%;
-}
 #overlay {
     position: fixed; /* Sit on top of the page content */
     display: none; /* Hidden by default */
@@ -133,6 +31,103 @@ mat-radio-button{
     background-color: rgba(0,0,0,0.5); /* Black background with opacity */
     z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
     cursor: pointer; /* Add a pointer on hover */
-    animation-name: fade;
-    animation-duration: 1.5s;
+}
+
+.main-container {
+    padding-left: 100px;
+    padding-right: 100px;
+    padding-top: 60px;
+    /* background-color: #f8f8f8; */
+
+}
+
+.toggleimg{
+    height:20px;
+}
+
+.outputimg{
+    height:75px;
+}
+
+.main-row {
+    height: calc(100vh - 110px);
+}
+
+textarea {  /* position is inherited */
+    left: 0; 
+    top: 0; 
+    right: 0;
+    bottom: 100px;  /* Actually the height of select and input */
+    width: 100%;
+    height: 97%;
+
+    border-radius: 8px;
+    border: none;
+
+    -webkit-box-shadow: 0px 0px 8px -1px rgba(0,0,0,0.48);
+    -moz-box-shadow: 0px 0px 8px -1px rgba(0,0,0,0.48);
+    box-shadow: 0px 0px 8px -1px rgba(0,0,0,0.48);
+    margin-top: 10px;
+
+    padding: 25px;
+
+    font-size: 20px;
+    font-family: 'Raleway', sans-serif;
+
+    resize: none;
+
+}
+
+.cringe {
+    font-family: 'Raleway', sans-serif;
+}
+
+textarea:focus {
+    outline: none;
+}
+
+.buttons-container {
+    font-family: 'Raleway', sans-serif;
+    padding-bottom: 1vh;
+}
+
+.modal {
+    font-family: 'Raleway', sans-serif;
+}
+
+button:focus {outline:0;}
+
+.flag-img {
+    height: 55px;
+}
+
+.flag-img-btn, button {
+    border:none;
+    background: none;
+}
+
+.flag-img-txt {
+    color: black;
+}
+
+.navbar {
+    border-bottom: 1px solid #dddddd;
+    background-color: #edeeef;
+}
+
+.sechead{
+    font-size: 15px;
+}
+
+.intro{
+    font-size: 14px;
+}
+
+.steps{
+    padding-left: 13px;
+    padding-right: 13px;
+    margin-top: 25px; 
+}
+.innersteps{
+    padding-left: 20px;
 }
